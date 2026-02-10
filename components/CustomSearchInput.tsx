@@ -1,7 +1,7 @@
-import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
-const CustomInput = () => {
+const CustomSearchInput = () => {
   return (
     <div className="w-full flex flex-1 justify-center items-center relative">
       <Input
@@ -16,4 +16,4 @@ const CustomInput = () => {
     </div>
   );
 };
-export { CustomInput };
+export { CustomSearchInput };

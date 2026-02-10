@@ -1,46 +1,33 @@
 "use client";
+import { useState } from "react";
 import { CustomButton } from "@/components/CustomButton";
-import { CustomInput } from "@/components/CustomInput";
+import { CustomSearchInput } from "@/components/CustomSearchInput";
+import { filterList } from "../constant";
+import { NovelList } from "./NovelList";
 
 const NovelFilter = () => {
+  const [activeFilter, setActiveFilter] = useState("Latest");
   return (
-    <div className=" flex justify-between items-center mt-20" id="id">
-      <div className="flex gap-5">
-        <CustomButton
-          variant={"outline"}
-          label="Latest"
-          padding="px-9 py-6"
-          fontSize="text-[28px]"
-        />
-        <CustomButton
-          variant={"outline"}
-          label="Hot"
-          padding="px-9 py-6"
-          fontSize="text-[28px]"
-        />
-        <CustomButton
-          variant={"outline"}
-          label="Most watched"
-          padding="px-9 py-6"
-          fontSize="text-[28px]"
-        />
-        <CustomButton
-          variant={"outline"}
-          label="Hightest rate"
-          padding="px-9 py-6"
-          fontSize="text-[28px]"
-          active
-        />
-        <CustomButton
-          variant={"outline"}
-          label="Types"
-          padding="px-9 py-6"
-          fontSize="text-[28px]"
-        />
+    <div className="flex flex-col gap-y-22.5">
+      <div className=" flex justify-between items-center mt-20" id="id">
+        <div className="flex gap-5">
+          {filterList.map((filter) => (
+            <CustomButton
+              key={filter.label}
+              variant={"outline"}
+              label={filter.label}
+              padding="px-9 py-6"
+              fontSize="text-[28px]"
+              active={filter.label === activeFilter}
+              onClick={() => setActiveFilter(filter.label)}
+            />
+          ))}
+        </div>
+        <div className="flex justify-center items-center">
+          <CustomSearchInput />
+        </div>
       </div>
-      <div className="flex justify-center items-center">
-        <CustomInput />
-      </div>
+      <NovelList />
     </div>
   );
 };

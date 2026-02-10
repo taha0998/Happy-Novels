@@ -8,11 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "lint-fix": "eslint --fix",
-    "type": "tsx --noEmit",
+    "type": "tsc --noEmit",
     "postinstall": "prisma generate"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
+    "dotenv": "^17.2.4",
     "lucide-react": "^0.563.0",
     "motion": "^12.33.0",
     "next": "16.1.6",
@@ -22,6 +23,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@prisma/client": "^7.3.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

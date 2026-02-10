@@ -1,9 +1,9 @@
+import Link from "next/link";
 import {
   RippleButton,
   RippleButtonRipples,
 } from "@/components/animate-ui/components/buttons/ripple";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 type CustomButtonProps = {
   variant?:
@@ -20,6 +20,7 @@ type CustomButtonProps = {
   padding?: string;
   active?: boolean;
   fontSize?: string;
+  onClick?: () => void;
 };
 
 const CustomButton = ({
@@ -28,6 +29,7 @@ const CustomButton = ({
   padding,
   active,
   fontSize,
+  onClick,
 }: CustomButtonProps) => {
   return (
     <RippleButton
@@ -40,6 +42,7 @@ const CustomButton = ({
         active ? "bg-primary text-background" : "",
         fontSize ? fontSize : "",
       )}
+      onClick={onClick}
     >
       <Link href={""}>{label}</Link>
       <RippleButtonRipples />

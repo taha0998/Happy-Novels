@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Novel {
+  id          String       @unique @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  title       String
+  description String
+  types       TypeNovels[]
+}
+
+model TypeNovels {
+  id      String @unique @default(cuid())
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  novelId String
+  type    Type   @relation(fields: [typeId], references: [id])
+  typeId  String
+
+  @@index([novelId, typeId])
+}
+
+model Type {
+  id         String       @unique @default(cuid())
+  name       String
+  typeNovels TypeNovels[]
+}

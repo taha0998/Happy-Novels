@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Rubik } from "next/font/google";
-import "./globals.css";
 import { Header } from "./_navigation/Header";
 
 const rubik = Rubik({
