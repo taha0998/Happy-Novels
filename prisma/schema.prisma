@@ -7,27 +7,165 @@ datasource db {
   provider = "postgresql"
 }
 
-model Novel {
-  id          String       @unique @default(cuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  title       String
-  description String
-  types       TypeNovels[]
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  sessions     Session[]
+  profile      Profile[]
 }
 
-model TypeNovels {
-  id      String @unique @default(cuid())
-  novel   Novel  @relation(fields: [novelId], references: [id])
-  novelId String
-  type    Type   @relation(fields: [typeId], references: [id])
-  typeId  String
+model Profile {
+  id                  String                  @id @default(cuid())
+  name                String
+  favorite            LinkFavoriteNovel[]
+  watchLater          LinkWatchLaterNovel[]
+  notification        LinkNotificationNovel[]
+  user                User?                   @relation(fields: [userId], references: [id])
+  userId              String?
+  chapterComments     ChapterComment[]
+  novelComments       NovelComment[]
+  novelCommentReplies NovelCommentReply[]
+}
 
-  @@index([novelId, typeId])
+model LinkFavoriteNovel {
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  novelId   String
+  novel     Novel   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@id([profileId, novelId])
+  @@index([profileId])
+  @@index([novelId])
+}
+
+model LinkWatchLaterNovel {
+  id        String  @id @default(cuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  novelId   String
+  novel     Novel   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([novelId])
+}
+
+model LinkNotificationNovel {
+  id        String  @id @default(cuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  novelId   String
+  novel     Novel   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([novelId])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Novel {
+  id                     String                  @id @default(cuid())
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  title                  String                  @unique
+  description            String
+  coverImg               String
+  // TODO Rating after 100y
+  rating                 Int
+  ratingCount            Int
+  chapters               Chapter[]
+  novelTypes             LinkTypeNovel[]
+  linkFavoriteNovel      LinkFavoriteNovel[]
+  comments               NovelComment[]
+  recommendations        NovelRecommendation[]   @relation("TargetNovel")
+  recommendedIn          NovelRecommendation[]   @relation("RecommendedNovel")
+  linkWatchLaterNovels   LinkWatchLaterNovel[]
+  linkNotificationNovels LinkNotificationNovel[]
+}
+
+model NovelRecommendation {
+  recommendedNovelId String
+  recommendedNovel   Novel  @relation("RecommendedNovel", fields: [recommendedNovelId], references: [id], onDelete: Cascade)
+
+  targetNovelId String
+  targetNovel   Novel  @relation("TargetNovel", fields: [targetNovelId], references: [id], onDelete: Cascade)
+
+  @@id([recommendedNovelId, targetNovelId])
+  @@index([recommendedNovelId])
+  @@index([targetNovelId])
+}
+
+model LinkTypeNovel {
+  id      String @id @default(cuid())
+  novelId String
+  novel   Novel  @relation(fields: [novelId], references: [id])
+  typeId  String
+  type    Type   @relation(fields: [typeId], references: [id])
+
+  @@index([novelId])
+  @@index([typeId])
 }
 
 model Type {
-  id         String       @unique @default(cuid())
+  id         String          @id @default(cuid())
   name       String
-  typeNovels TypeNovels[]
+  typeNovels LinkTypeNovel[]
+}
+
+model Chapter {
+  id      String           @id @default(cuid())
+  title   String
+  number  String
+  content String
+  novelId String
+  novel   Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  comment ChapterComment[]
+
+  @@index([novelId])
+}
+
+model ChapterComment {
+  id        String   @id @default(cuid())
+  content   String
+  profileId String?
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  chapterId String
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([chapterId])
+}
+
+model NovelComment {
+  id                String              @id @default(cuid())
+  content           String
+  profileId         String
+  profile           Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  novelId           String
+  novel             Novel               @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  novelCommentReply NovelCommentReply[]
+
+  @@index([profileId])
+  @@index([novelId])
+}
+
+model NovelCommentReply {
+  id             String       @id @default(cuid())
+  content        String
+  profileId      String?
+  profile        Profile?     @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  novelcommentId String
+  novelComment   NovelComment @relation(fields: [novelcommentId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([novelcommentId])
 }

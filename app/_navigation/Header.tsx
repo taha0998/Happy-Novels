@@ -1,10 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
+import { HomePath } from "@/lib/paths";
 import { CustomButton } from "../../components/CustomButton";
 
 const Header = () => {
   return (
     <nav className="flex w-[90%] justify-between items-center self-center mt-1 select-none ">
-      <div className="flex justify-start items-center">
+      <Link href={HomePath()} className="flex justify-start items-center">
         <Image
           src="https://yuzykc5xj5.ufs.sh/f/9ZvEbi04z0PNzHsNR3flRbkGJp1tN2PC5WaLxHBD7TqQOgc9"
           alt="happy novels logo"
@@ -13,7 +15,7 @@ const Header = () => {
           unoptimized={true}
           loading="eager"
         />
-      </div>
+      </Link>
       <div className="flex gap-5 items-center">
         <div className="theme-switcher"></div>
         <div className="theme-changer"></div>

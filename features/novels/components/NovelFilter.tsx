@@ -3,7 +3,6 @@ import { useState } from "react";
 import { CustomButton } from "@/components/CustomButton";
 import { CustomSearchInput } from "@/components/CustomSearchInput";
 import { filterList } from "../constant";
-import { NovelList } from "./NovelList";
 
 const NovelFilter = () => {
   const [activeFilter, setActiveFilter] = useState("Latest");
@@ -17,7 +16,7 @@ const NovelFilter = () => {
               variant={"outline"}
               label={filter.label}
               padding="px-9 py-6"
-              fontSize="text-[28px]"
+              fontSize="text-[25px] font-medium"
               active={filter.label === activeFilter}
               onClick={() => setActiveFilter(filter.label)}
             />
@@ -27,7 +26,6 @@ const NovelFilter = () => {
           <CustomSearchInput />
         </div>
       </div>
-      <NovelList />
     </div>
   );
 };
