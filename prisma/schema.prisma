@@ -1,10 +1,11 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -26,6 +27,26 @@ model Profile {
   chapterComments     ChapterComment[]
   novelComments       NovelComment[]
   novelCommentReplies NovelCommentReply[]
+}
+
+model Novel {
+  id                     String                  @id @default(cuid())
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  title                  String                  @unique
+  description            String
+  coverImg               String
+  // TODO Rating 
+  rating                 Int
+  ratingCount            Int
+  chapters               Chapter[]
+  novelTypes             LinkTypeNovel[]
+  linkFavoriteNovel      LinkFavoriteNovel[]
+  comments               NovelComment[]
+  recommendations        NovelRecommendation[]   @relation("TargetNovel")
+  recommendedIn          NovelRecommendation[]   @relation("RecommendedNovel")
+  linkWatchLaterNovels   LinkWatchLaterNovel[]
+  linkNotificationNovels LinkNotificationNovel[]
 }
 
 model LinkFavoriteNovel {
@@ -70,26 +91,6 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-}
-
-model Novel {
-  id                     String                  @id @default(cuid())
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  title                  String                  @unique
-  description            String
-  coverImg               String
-  // TODO Rating after 100y
-  rating                 Int
-  ratingCount            Int
-  chapters               Chapter[]
-  novelTypes             LinkTypeNovel[]
-  linkFavoriteNovel      LinkFavoriteNovel[]
-  comments               NovelComment[]
-  recommendations        NovelRecommendation[]   @relation("TargetNovel")
-  recommendedIn          NovelRecommendation[]   @relation("RecommendedNovel")
-  linkWatchLaterNovels   LinkWatchLaterNovel[]
-  linkNotificationNovels LinkNotificationNovel[]
 }
 
 model NovelRecommendation {

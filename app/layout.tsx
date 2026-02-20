@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Rubik } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Footer } from "@/components/Foooter";
 import { Header } from "./_navigation/Header";
 
@@ -31,13 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${rubik.className} ${geistSans.variable} ${geistMono.variable} antialiased flex flex-col`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <NuqsAdapter>
+          <Header />
+          {children}
+          <Footer />
+        </NuqsAdapter>
       </body>
     </html>
   );

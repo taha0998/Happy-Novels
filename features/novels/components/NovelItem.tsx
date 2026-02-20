@@ -37,12 +37,15 @@ const NovelItem = ({
           className="w-[344.76px] h-[494.73px] rounded-[10px] border-4 border-primary
           transition-all duration-100 ease-in-out 
           hover:border-11  hover:border-primary/90"
+          loading="lazy"
         />
-        <p className="text-[26px] font-medium line-clamp-2 ">{title}</p>
-        <p className="text-[26px] font-medium">
-          ratings: <span className="text-primary">{rating}</span>/100 (
-          {fixedRatingCount(ratingCount)})
-        </p>
+        <div className="flex flex-col mt-3 gap-2">
+          <p className="text-[26px] font-medium line-clamp-2 ">{title}</p>
+          <p className="text-[26px] font-medium">
+            ratings: <span className="text-primary">{rating}</span>/100 (
+            {fixedRatingCount(ratingCount)})
+          </p>
+        </div>
       </Link>
     </div>
   );

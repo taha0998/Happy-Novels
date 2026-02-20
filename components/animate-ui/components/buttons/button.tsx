@@ -19,8 +19,8 @@ const buttonVariants = cva(
         default: `${add} bg-foreground text-background hover:bg-foreground/90`,
         accent:
           " bg-accent text-accent-foreground shadow-xs hover:bg-accent/90",
-        destructive: `${add} ${border} text-foreground  bg-primary  shadow-xs hover:bg-primary/90 focus-visible:ring-primary/20 dark:focus-visible:ring-primary/40 dark:bg-primary/60`,
-        outline: `${add} ${border} bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50`,
+        destructive: `${add} ${border} text-foreground  bg-primary  shadow-xs hover:bg-primary/90 focus-visible:ring-primary/20 dark:focus-visible:ring-primary/40 dark:bg-primary`,
+        outline: `${add} ${border} bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 dark:hover:text-white`,
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost:
@@ -54,4 +54,4 @@ function Button({ className, variant, size, ...props }: ButtonProps) {
   );
 }
 
-export { Button, type ButtonProps,buttonVariants };
+export { Button, type ButtonProps, buttonVariants };

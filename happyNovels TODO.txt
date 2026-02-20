@@ -1,0 +1,13 @@
+1 - homepage
+
+2 - novel page
+
+3 - auth
+
+4 - filter
+
+5 - search
+
+6 - chapter page
+
+7 -profile

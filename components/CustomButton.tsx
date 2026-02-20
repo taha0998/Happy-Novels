@@ -39,7 +39,7 @@ const CustomButton = ({
       className={cn(
         "flex justify-center select-none",
         padding ? padding : "px-7",
-        active ? "bg-primary text-background" : "",
+        active ? "bg-primary text-background " : "",
         fontSize ? fontSize : "",
       )}
       onClick={onClick}
