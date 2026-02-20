@@ -9,11 +9,26 @@ export const getNovels = async (searchParams: ParsedSearchParams) => {
     const take = 20;
     const skip = SearchParams.page * take
 
-    return await prisma.novel.findMany({
-        skip,
-        take,
-        orderBy: {
-            createdAt: 'desc'
+    const [novels, count] = await prisma.$transaction([
+        prisma.novel.findMany({
+            skip,
+            take,
+            orderBy: {
+                createdAt: 'desc'
+            }
+        }),
+        prisma.novel.count()
+    ])
+
+    const hasNext = count > (take + skip)
+
+    return {
+        list: novels.map((novel) => ({
+            ...novel
+        })),
+        metadata: {
+            count,
+            hasNext
         }
-    })
+    }
 }

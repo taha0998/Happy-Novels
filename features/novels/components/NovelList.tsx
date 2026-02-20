@@ -1,17 +1,19 @@
 import { getNovels } from "../queries/get-novels";
 import { ParsedSearchParams } from "../SearchParams";
 import { NovelItem } from "./NovelItem";
+import { NovelsPaginationButtons } from "./NovelPaginationButtons";
 
 type NovelListProps = {
   searchParams: ParsedSearchParams;
 };
 
 const NovelList = async ({ searchParams }: NovelListProps) => {
-  const novels = await getNovels(searchParams);
+  const { list: novels, metadata: novelsMetadata } =
+    await getNovels(searchParams);
 
   return (
     <>
-      <div className="w-full flex  flex-wrap gap-x-29.25 gap-y-20 mt-15">
+      <div className="w-full flex  flex-wrap gap-x-29.25 gap-y-15 mt-15">
         {novels.map((novel) => (
           <NovelItem
             key={novel.id}
@@ -22,6 +24,9 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
             ratingCount={novel.ratingCount}
           />
         ))}
+        <div className="w-full mt-2.5">
+          <NovelsPaginationButtons novelsMetadata={novelsMetadata} />
+        </div>
       </div>
     </>
   );

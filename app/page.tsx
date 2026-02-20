@@ -2,7 +2,6 @@ import { SearchParams } from "nuqs/server";
 import { Title } from "@/components/Title";
 import { NovelFilter } from "@/features/novels/components/NovelFilter";
 import { NovelList } from "@/features/novels/components/NovelList";
-import { NovelsPaginationButtons } from "@/features/novels/components/NovelPaginationButtons";
 import { searchParamsCache } from "@/features/novels/SearchParams";
 
 type HomePageProps = {
@@ -15,7 +14,6 @@ const HomePage = ({ searchParams }: HomePageProps) => {
       <Title />
       <NovelFilter />
       <NovelList searchParams={searchParamsCache.parse(searchParams)} />
-      <NovelsPaginationButtons />
     </div>
   );
 };
