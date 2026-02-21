@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { novelPath } from "@/lib/paths";
+import { fixedRatingCount } from "../utils/fixedRatingCount";
 
 type NovelItemProps = {
   id: string;
@@ -17,15 +18,6 @@ const NovelItem = ({
   rating,
   ratingCount,
 }: NovelItemProps) => {
-  const fixedRatingCount = (ratingCount: number | null | undefined) => {
-    if (!ratingCount) return "??";
-    if (ratingCount < 1000) {
-      return ratingCount;
-    }
-    const fixedRatingCount = (ratingCount / 1000).toFixed(1);
-    return `${fixedRatingCount}K`;
-  };
-
   return (
     <div className="flex flex-col w-86.25">
       <Link href={novelPath(id)}>

@@ -131,6 +131,8 @@
   --color-white: var(--white);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --animate-header-from-top: header-from-top 0.5s ease-out;
+  --animate-fade-in-top: fade-in-top 0.5s ease-out;
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -186,6 +188,26 @@
   --tracking-wide: calc(var(--tracking-normal) + 0.025em);
   --tracking-wider: calc(var(--tracking-normal) + 0.05em);
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+
+  /* Animation */
+  @keyframes header-from-top {
+    from {
+      transform: translateY(-16px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in-top {
+    from {
+      opacity: 0;
+      transform: translateY(-16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 body {

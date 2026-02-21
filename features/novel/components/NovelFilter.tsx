@@ -7,7 +7,10 @@ import { filterList } from "../constant";
 const NovelFilter = () => {
   const [activeFilter, setActiveFilter] = useState("Latest");
   return (
-    <div className="flex flex-col gap-y-22.5" id="filter-bar">
+    <div
+      className="flex flex-col gap-y-22.5 animate-fade-in-top"
+      id="filter-bar"
+    >
       <div className=" flex justify-between items-center mt-20" id="id">
         <div className="flex gap-5">
           {filterList.map((filter) => (

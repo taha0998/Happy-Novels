@@ -1,7 +1,7 @@
 "use client";
-import { useQueryStates } from "nuqs";
+import { useQueryState } from "nuqs";
 import { PaginationButton } from "@/components/buttons/PaginationButton";
-import { paginationPageOptions, paginationPageParser } from "../SearchParams";
+import { paginationPageParser } from "../SearchParams";
 
 type NovelsPaginationButtonsProps = {
   novelsMetadata: { count: number; hasNext: boolean };
@@ -10,10 +10,7 @@ type NovelsPaginationButtonsProps = {
 const NovelsPaginationButtons = ({
   novelsMetadata,
 }: NovelsPaginationButtonsProps) => {
-  const [pagination, setPagination] = useQueryStates(
-    paginationPageParser,
-    paginationPageOptions,
-  );
+  const [page, setPagination] = useQueryState("page", paginationPageParser);
 
   const scrollTop = () => {
     const filterBar = document.getElementById("filter-bar");
@@ -21,19 +18,18 @@ const NovelsPaginationButtons = ({
   };
 
   const handleNext = () => {
-    setPagination({ ...pagination, page: pagination.page + 1 });
+    setPagination(page + 1);
     scrollTop();
   };
 
   const handelPrev = () => {
-    setPagination({ ...pagination, page: pagination.page - 1 });
+    setPagination(page - 1);
     scrollTop();
   };
-  console.log(novelsMetadata.hasNext);
 
   return (
     <div className="flex justify-center gap-4">
-      {pagination.page > 0 && (
+      {page > 0 && (
         <PaginationButton label="Prev 20" icon="left" onClick={handelPrev} />
       )}
       {novelsMetadata.hasNext && (

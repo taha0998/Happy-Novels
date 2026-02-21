@@ -5,7 +5,7 @@ import { CustomButton } from "../../components/CustomButton";
 
 const Header = () => {
   return (
-    <nav className="flex w-[90%] justify-between items-center self-center mt-1 select-none ">
+    <nav className="flex w-440.5 justify-between items-center self-center mt-1 select-none animate-header-from-top  ">
       <Link href={HomePath()} className="flex justify-start items-center">
         <Image
           src="https://yuzykc5xj5.ufs.sh/f/9ZvEbi04z0PNzHsNR3flRbkGJp1tN2PC5WaLxHBD7TqQOgc9"

@@ -17,16 +17,16 @@ model User {
 }
 
 model Profile {
-  id                  String                  @id @default(cuid())
-  name                String
-  favorite            LinkFavoriteNovel[]
-  watchLater          LinkWatchLaterNovel[]
-  notification        LinkNotificationNovel[]
-  user                User?                   @relation(fields: [userId], references: [id])
-  userId              String?
-  chapterComments     ChapterComment[]
-  novelComments       NovelComment[]
-  novelCommentReplies NovelCommentReply[]
+  id                     String                  @id @default(cuid())
+  name                   String
+  LinkFavoriteNovels     LinkFavoriteNovel[]
+  LinkWatchLaterNovels   LinkWatchLaterNovel[]
+  LinkNotificationNovels LinkNotificationNovel[]
+  user                   User?                   @relation(fields: [userId], references: [id])
+  userId                 String?
+  chapterComments        ChapterComment[]
+  novelComments          NovelComment[]
+  novelCommentReplies    NovelCommentReply[]
 }
 
 model Novel {
@@ -40,13 +40,13 @@ model Novel {
   rating                 Int
   ratingCount            Int
   chapters               Chapter[]
-  novelTypes             LinkTypeNovel[]
-  linkFavoriteNovel      LinkFavoriteNovel[]
+  LinkTypeNovels         LinkTypeNovel[]
+  LinkFavoriteNovels     LinkFavoriteNovel[]
   comments               NovelComment[]
   recommendations        NovelRecommendation[]   @relation("TargetNovel")
   recommendedIn          NovelRecommendation[]   @relation("RecommendedNovel")
-  linkWatchLaterNovels   LinkWatchLaterNovel[]
-  linkNotificationNovels LinkNotificationNovel[]
+  LinkWatchLaterNovels   LinkWatchLaterNovel[]
+  LinkNotificationNovels LinkNotificationNovel[]
 }
 
 model LinkFavoriteNovel {
@@ -117,9 +117,9 @@ model LinkTypeNovel {
 }
 
 model Type {
-  id         String          @id @default(cuid())
-  name       String
-  typeNovels LinkTypeNovel[]
+  id             String          @id @default(cuid())
+  name           String
+  LinkTypeNovels LinkTypeNovel[]
 }
 
 model Chapter {

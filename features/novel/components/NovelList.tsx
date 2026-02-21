@@ -13,7 +13,7 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
 
   return (
     <>
-      <div className="w-full flex  flex-wrap gap-x-29.25 gap-y-15 mt-15">
+      <div className="w-full flex  flex-wrap gap-x-29.25 gap-y-15 mt-15 animate-fade-in-top">
         {novels.map((novel) => (
           <NovelItem
             key={novel.id}
@@ -25,7 +25,9 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
           />
         ))}
         <div className="w-full mt-2.5">
-          <NovelsPaginationButtons novelsMetadata={novelsMetadata} />
+          {novels.length >= 20 && (
+            <NovelsPaginationButtons novelsMetadata={novelsMetadata} />
+          )}
         </div>
       </div>
     </>
