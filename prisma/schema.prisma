@@ -123,13 +123,15 @@ model Type {
 }
 
 model Chapter {
-  id      String           @id @default(cuid())
-  title   String
-  number  String
-  content String
-  novelId String
-  novel   Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  comment ChapterComment[]
+  id        String           @id @default(cuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  title     String
+  number    Int
+  content   String
+  novelId   String
+  novel     Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  comment   ChapterComment[]
 
   @@index([novelId])
 }

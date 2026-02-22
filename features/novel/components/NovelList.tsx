@@ -1,7 +1,8 @@
 import { getNovels } from "../queries/get-novels";
 import { ParsedSearchParams } from "../SearchParams";
 import { NovelItem } from "./NovelItem";
-import { NovelsPaginationButtons } from "./NovelPaginationButtons";
+import { NovelNextPagination } from "./NovelNextPagination";
+import { NovelPrevPagination } from "./NovelPrevPagination";
 
 type NovelListProps = {
   searchParams: ParsedSearchParams;
@@ -10,6 +11,7 @@ type NovelListProps = {
 const NovelList = async ({ searchParams }: NovelListProps) => {
   const { list: novels, metadata: novelsMetadata } =
     await getNovels(searchParams);
+  console.log(novels, novels.length, novelsMetadata.count);
 
   return (
     <>
@@ -24,9 +26,10 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
             ratingCount={novel.ratingCount}
           />
         ))}
-        <div className="w-full mt-2.5">
-          {novels.length >= 20 && (
-            <NovelsPaginationButtons novelsMetadata={novelsMetadata} />
+        <div className="w-full mt-2.5 flex justify-center gap-4 ">
+          {<NovelPrevPagination />}
+          {novels.length === 20 && novelsMetadata.hasNext && (
+            <NovelNextPagination />
           )}
         </div>
       </div>
