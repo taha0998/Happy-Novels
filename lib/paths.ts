@@ -1,2 +1,3 @@
 export const HomePath = () => '/'
-export const novelPath = (novelId: string) => `/novels/${novelId}`
+export const NovelPath = (novelId: string) => `/novels/${novelId}`
+export const ChapterPath = (chapterId: string) => `/chapters/${chapterId}`

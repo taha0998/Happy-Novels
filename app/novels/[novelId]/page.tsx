@@ -1,27 +1,39 @@
+import { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 import { NovelCard } from "@/features/novel/components/novelcard/NovelCard";
 import { NovelChapters } from "@/features/novel/components/NovelChapters";
-import { getChapters } from "@/features/novel/queries/get-chapters";
+import { NovelChaptersLoader } from "@/features/novel/components/NovelChaptersLoader";
 import { getNovel } from "@/features/novel/queries/get-novel";
+import { searchParamsCache } from "@/features/novel/searchParams";
 
 type NovelPageProps = {
   params: Promise<{
     novelId: string;
   }>;
+  searchParams: Promise<SearchParams>;
 };
-const NovelPage = async ({ params }: NovelPageProps) => {
-  const { novelId } = await params;
-  const novelPromise = getNovel(novelId);
-  const chaptersPromise = getChapters(novelId);
 
-  const [novel, chapters] = await Promise.all([novelPromise, chaptersPromise]);
+export const ravalidate = 30;
+
+const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
+  const { novelId } = await params;
+  const novel = await getNovel(novelId);
+
+  const ParsedSearchParams = await searchParamsCache.parse(searchParams);
+  const key = ParsedSearchParams.chaptersPage;
 
   if (!novel) {
     return;
   }
   return (
-    <div className="w-440.5 self-center ">
+    <div className="w-440.5 self-center flex flex-col">
       <NovelCard novel={novel} />
-      <NovelChapters chapters={chapters.list} />
+      <Suspense key={key} fallback={<NovelChaptersLoader />}>
+        <NovelChapters
+          novelId={novelId}
+          searchParams={searchParamsCache.parse(searchParams)}
+        />
+      </Suspense>
     </div>
   );
 };

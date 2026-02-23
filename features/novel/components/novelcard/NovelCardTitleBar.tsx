@@ -12,7 +12,7 @@ const NovelCardTitleBar = ({
   ratingCount,
 }: NovelCardTitleBarProps) => {
   return (
-    <div className="flex gap-8 w-full justify-between items-start">
+    <div className="flex gap-8 w-full justify-between items-center">
       <h1 className="text-[100px] font-semibold line-clamp-3 wrap-break-word">
         {title}
       </h1>

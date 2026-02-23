@@ -2,11 +2,13 @@ import { SearchParams } from "nuqs/server";
 import { Title } from "@/components/Title";
 import { NovelFilter } from "@/features/novel/components/NovelFilter";
 import { NovelList } from "@/features/novel/components/NovelList";
-import { searchParamsCache } from "@/features/novel/SearchParams";
+import { searchParamsCache } from "@/features/novel/searchParams";
 
 type HomePageProps = {
   searchParams: Promise<SearchParams>;
 };
+
+export const revalidate = 30;
 
 const HomePage = ({ searchParams }: HomePageProps) => {
   return (

@@ -1,7 +1,7 @@
 "use client";
 import { useQueryState } from "nuqs";
 import { PaginationButton } from "@/components/buttons/PaginationButton";
-import { paginationPageParser } from "../SearchParams";
+import { paginationPageParser } from "../searchParams";
 
 type NovelsPaginationButtonsProps = {
   type: "Next" | "Prev";

@@ -2,7 +2,7 @@
 
 import { cache } from "react";
 import { prisma } from "@/lib/prisma";
-import { ParsedSearchParams } from "../SearchParams";
+import { ParsedSearchParams } from "../searchParams";
 
 export const getNovels = cache(async (searchParams: ParsedSearchParams) => {
     const SearchParams = await searchParams;

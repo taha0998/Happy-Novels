@@ -1,5 +1,5 @@
 import { getNovels } from "../queries/get-novels";
-import { ParsedSearchParams } from "../SearchParams";
+import { ParsedSearchParams } from "../searchParams";
 import { NovelItem } from "./NovelItem";
 import { NovelNextPagination } from "./NovelNextPagination";
 import { NovelPrevPagination } from "./NovelPrevPagination";
@@ -11,7 +11,6 @@ type NovelListProps = {
 const NovelList = async ({ searchParams }: NovelListProps) => {
   const { list: novels, metadata: novelsMetadata } =
     await getNovels(searchParams);
-  console.log(novels, novels.length, novelsMetadata.count);
 
   return (
     <>

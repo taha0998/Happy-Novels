@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { novelPath } from "@/lib/paths";
+import { NovelPath } from "@/lib/paths";
 import { fixedRatingCount } from "../utils/fixedRatingCount";
 
 type NovelItemProps = {
@@ -20,7 +20,7 @@ const NovelItem = ({
 }: NovelItemProps) => {
   return (
     <div className="flex flex-col w-86.25">
-      <Link href={novelPath(id)}>
+      <Link href={NovelPath(id)}>
         <Image
           src={coverImg}
           alt="Novel {Title}"
