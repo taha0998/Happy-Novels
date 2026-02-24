@@ -214,7 +214,6 @@ body {
   letter-spacing: var(--tracking-normal);
 }
 html {
-  scroll-behavior: smooth;
 }
 
 @layer base {

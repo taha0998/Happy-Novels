@@ -16,17 +16,28 @@ model User {
   profile      Profile[]
 }
 
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 model Profile {
   id                     String                  @id @default(cuid())
-  name                   String
+  username               String                  @unique
+  userId                 String?
+  user                   User?                   @relation(fields: [userId], references: [id])
   LinkFavoriteNovels     LinkFavoriteNovel[]
   LinkWatchLaterNovels   LinkWatchLaterNovel[]
   LinkNotificationNovels LinkNotificationNovel[]
-  user                   User?                   @relation(fields: [userId], references: [id])
-  userId                 String?
   chapterComments        ChapterComment[]
   novelComments          NovelComment[]
   novelCommentReplies    NovelCommentReply[]
+
+  @@index([userId])
 }
 
 model Novel {
@@ -82,15 +93,6 @@ model LinkNotificationNovel {
 
   @@index([profileId])
   @@index([novelId])
-}
-
-model Session {
-  id        String   @id
-  expiresAt DateTime
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 model NovelRecommendation {
