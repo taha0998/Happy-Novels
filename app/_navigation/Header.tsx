@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { HomePath } from "@/lib/paths";
+import { HomePath, SignInPath, SignUpPath } from "@/lib/paths";
 import { CustomButton } from "../../components/CustomButton";
 
 const Header = () => {
@@ -19,8 +19,12 @@ const Header = () => {
       <div className="flex gap-5 items-center">
         <div className="theme-switcher"></div>
         <div className="theme-changer"></div>
-        <CustomButton label="Sign Up" variant={"outline"} padding=" px-6" />
-        <CustomButton label="Sign In" />
+        <Link href={SignUpPath()}>
+          <CustomButton label="Sign Up" variant={"outline"} padding=" px-6" />
+        </Link>
+        <Link href={SignInPath()}>
+          <CustomButton label="Sign In" />
+        </Link>
         <CustomButton label="Donate" variant={"destructive"} padding=" px-4" />
       </div>
     </nav>

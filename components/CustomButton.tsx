@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   RippleButton,
   RippleButtonRipples,
@@ -44,7 +43,7 @@ const CustomButton = ({
       )}
       onClick={onClick}
     >
-      <Link href={""}>{label}</Link>
+      {label}
       <RippleButtonRipples />
     </RippleButton>
   );

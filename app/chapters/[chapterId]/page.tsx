@@ -9,7 +9,7 @@ const ChapterPage = async ({ params }: ChapterPageProps) => {
   console.log(chapterId);
   return (
     <>
-      <p>{chapterId}</p>
+      <p className="bg-green-800">{chapterId}</p>
     </>
   );
 };

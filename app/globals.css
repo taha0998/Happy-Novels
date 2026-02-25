@@ -210,11 +210,11 @@
   }
 }
 
-body {
+/* body {
   letter-spacing: var(--tracking-normal);
 }
 html {
-}
+} */
 
 @layer base {
   * {
