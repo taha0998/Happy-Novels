@@ -8,7 +8,7 @@ type AuthCardProps = {
 
 const AuthCard = ({ form, title, img }: AuthCardProps) => {
   return (
-    <div className="flex flex-col w-[91%] self-center mt-7.5">
+    <div className="flex flex-col w-[91%] self-center mt-7.5 animate-fade-in-top">
       <div className="flex w-[1206.92px] h-201.5 border-[3px] rounded-[16.65px] border-foreground justify-between self-center">
         <div className="flex flex-col w-[599.99px] justify-center items-center gap-15">
           <h2 className=" italic text-[55px]">{title}</h2>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { HomePath, SignInPath, SignUpPath } from "@/lib/paths";
 import { CustomButton } from "../../components/CustomButton";
 
-const Header = () => {
+const Header = async () => {
   return (
     <nav className="flex w-440.5 justify-between items-center self-center mt-1 select-none animate-header-from-top  ">
       <Link href={HomePath()} className="flex justify-start items-center">
@@ -17,15 +17,13 @@ const Header = () => {
         />
       </Link>
       <div className="flex gap-5 items-center">
-        <div className="theme-switcher"></div>
-        <div className="theme-changer"></div>
         <Link href={SignUpPath()}>
           <CustomButton label="Sign Up" variant={"outline"} padding=" px-6" />
         </Link>
         <Link href={SignInPath()}>
           <CustomButton label="Sign In" />
         </Link>
-        <CustomButton label="Donate" variant={"destructive"} padding=" px-4" />
+        <CustomButton label="Donate" variant="destructive" padding=" px-4" />
       </div>
     </nav>
   );
