@@ -2,7 +2,7 @@ import { LucideLoaderCircle } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 
-const SubmitButton = () => {
+const SubmitButton = ({ label }: { label: string }) => {
   const { pending } = useFormStatus();
   return (
     <Button
@@ -14,7 +14,7 @@ const SubmitButton = () => {
       {pending && (
         <LucideLoaderCircle className=" animate-spin size-8.5 mr-1" />
       )}
-      Sign Up
+      {label}
     </Button>
   );
 };

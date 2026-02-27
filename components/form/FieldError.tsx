@@ -6,7 +6,6 @@ type FieldErrorProps = {
 };
 
 const FieldError = ({ actionState, name }: FieldErrorProps) => {
-  console.log(actionState.fieldError);
   const message = actionState.fieldError[name]?.[0];
   return <span className="mt-2 text-primary">{message}</span>;
 };

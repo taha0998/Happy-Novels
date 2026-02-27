@@ -1,17 +1,21 @@
-// get-auth TAHOWA
+"use server";
 
-// import { cookies } from "next/headers"
-// import { cache } from "react"
-// import { lucia } from "@/lib/lucia"
+import { cookies } from "next/headers";
+import { cache } from "react";
+import { validateSession } from "@/lib/oslo";
+import { SESSION_COOKIE_NAME } from "../session-cookie";
 
-// export const getAuth = cache(async () => {
-//     const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value ?? null;
-//     if (!sessionId) {
-//         return {
-//             user: null,
-//             session: null
-//         }
-//     };
-//     const result = lucia.validateSession(sessionId);
-//     return result
-// })
+export const getAuth = cache(async () => {
+
+    const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value ?? null;
+
+    if (!sessionToken) {
+        return {
+            user: null,
+            session: null
+        }
+    };
+
+    return await validateSession(sessionToken)
+
+})

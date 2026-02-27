@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getAuth } from "@/features/auth/actions/get-auth";
 import { HomePath, SignInPath, SignUpPath } from "@/lib/paths";
 import { CustomButton } from "../../components/CustomButton";
 
 const Header = async () => {
+  const { user } = await getAuth();
   return (
     <nav className="flex w-440.5 justify-between items-center self-center mt-1 select-none animate-header-from-top  ">
       <Link href={HomePath()} className="flex justify-start items-center">
@@ -17,13 +19,25 @@ const Header = async () => {
         />
       </Link>
       <div className="flex gap-5 items-center">
-        <Link href={SignUpPath()}>
-          <CustomButton label="Sign Up" variant={"outline"} padding=" px-6" />
-        </Link>
-        <Link href={SignInPath()}>
-          <CustomButton label="Sign In" />
-        </Link>
-        <CustomButton label="Donate" variant="destructive" padding=" px-4" />
+        {!user && (
+          <>
+            <Link href={SignUpPath()}>
+              <CustomButton
+                label="Sign Up"
+                variant={"outline"}
+                padding=" px-6"
+              />
+            </Link>
+            <Link href={SignInPath()}>
+              <CustomButton label="Sign In" />
+            </Link>
+          </>
+        )}
+        <CustomButton
+          label="Donate"
+          variant={user ? "default" : "destructive"}
+          padding=" px-4"
+        />
       </div>
     </nav>
   );
