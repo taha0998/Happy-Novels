@@ -1,5 +1,6 @@
 import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
+import { NovelRecommendation } from "@/components/novel/NovelRecommendation";
 import { NovelCard } from "@/features/novel/components/novelcard/NovelCard";
 import { NovelChapters } from "@/features/novel/components/NovelChapters";
 import { NovelChaptersLoader } from "@/features/novel/components/NovelChaptersLoader";
@@ -34,6 +35,7 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
           searchParams={searchParamsCache.parse(searchParams)}
         />
       </Suspense>
+      <NovelRecommendation />
     </div>
   );
 };

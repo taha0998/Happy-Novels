@@ -1,11 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAuth } from "@/features/auth/actions/get-auth";
+import { ProfileForm } from "@/components/auth/components/ProfileForm";
+import { getAuthOrRedirect } from "@/features/auth/actions/get-auth-or-redirect";
 import { HomePath, SignInPath, SignUpPath } from "@/lib/paths";
 import { CustomButton } from "../../components/CustomButton";
 
 const Header = async () => {
-  const { user } = await getAuth();
+  const { user } = await getAuthOrRedirect();
+  if (user && !user?.profile[0]) {
+    return <ProfileForm />;
+  }
   return (
     <nav className="flex w-440.5 justify-between items-center self-center mt-1 select-none animate-header-from-top  ">
       <Link href={HomePath()} className="flex justify-start items-center">
@@ -19,7 +23,7 @@ const Header = async () => {
         />
       </Link>
       <div className="flex gap-5 items-center">
-        {!user && (
+        {!user ? (
           <>
             <Link href={SignUpPath()}>
               <CustomButton
@@ -32,6 +36,8 @@ const Header = async () => {
               <CustomButton label="Sign In" />
             </Link>
           </>
+        ) : (
+          <>{user.profile[0].username}</>
         )}
         <CustomButton
           label="Donate"
