@@ -96,8 +96,9 @@ model LinkNotificationNovel {
 }
 
 model NovelRecommendation {
-  recommendedNovelId String
-  recommendedNovel   Novel  @relation("RecommendedNovel", fields: [recommendedNovelId], references: [id], onDelete: Cascade)
+  recommendedNovelId   String
+  recommendedNovel     Novel  @relation("RecommendedNovel", fields: [recommendedNovelId], references: [id], onDelete: Cascade)
+  userWhoRecommendName String
 
   targetNovelId String
   targetNovel   Novel  @relation("TargetNovel", fields: [targetNovelId], references: [id], onDelete: Cascade)

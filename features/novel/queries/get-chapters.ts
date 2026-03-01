@@ -1,3 +1,4 @@
+"use server"
 import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import { ParsedSearchParams } from "../searchParams";

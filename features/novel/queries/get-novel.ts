@@ -10,7 +10,9 @@ export const getNovel = async (id: string) => {
                 include: {
                     type: true,
                 }
-            }
-        }
+            },
+            recommendations: true,
+            recommendedIn: true,
+        },
     })
 }
