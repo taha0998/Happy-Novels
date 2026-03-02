@@ -25,7 +25,6 @@ const NovelRecommendation = async ({
     coverImg: targetNovelCover,
     title: targetNovelTitle,
   };
-  console.log(recommendedNovel, targetNovel);
 
   const userWhoRecommend = recommendedNovelInfo?.userWhoRecommendName;
 

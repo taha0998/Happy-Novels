@@ -15,7 +15,7 @@ const SubmitButton = ({ label, className }: SubmitButtonProps) => {
       type="submit"
       disabled={pending}
       size="none"
-      className={`text-[31.21px] w-full py-4 rounded-[9.71px] ${className}`}
+      className={`text-[31.21px] w-full py-4 rounded-[9.71px] cursor-pointer ${className}`}
     >
       {pending && (
         <LucideLoaderCircle className=" animate-spin size-8.5 mr-1" />
