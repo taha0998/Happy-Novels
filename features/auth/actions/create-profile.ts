@@ -6,7 +6,7 @@ import z from "zod";
 import { ActionState, fromErrorToActionState, toActionState } from "@/components/form/utils/to-action-state";
 import { HomePath } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
-import { getAuthOrRedirect } from "./get-auth-or-redirect";
+import { getAuthOrRedirect } from "../queries/get-auth-or-redirect";
 
 
 const createProfileShema = z.object({

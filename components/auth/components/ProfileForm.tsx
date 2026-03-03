@@ -1,4 +1,4 @@
-import { getAuthOrRedirect } from "@/features/auth/actions/get-auth-or-redirect";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { ProfileModule } from "./ProfileModule";
 
 const ProfileForm = async () => {

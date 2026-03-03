@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileForm } from "@/components/auth/components/ProfileForm";
-import { getAuthOrRedirect } from "@/features/auth/actions/get-auth-or-redirect";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { HomePath, SignInPath, SignUpPath } from "@/lib/paths";
 import { CustomButton } from "../../components/CustomButton";
 

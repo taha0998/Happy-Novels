@@ -153,6 +153,8 @@ model ChapterComment {
 
 model NovelComment {
   id                String              @id @default(cuid())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   content           String
   profileId         String
   profile           Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
@@ -166,6 +168,8 @@ model NovelComment {
 
 model NovelCommentReply {
   id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   content        String
   profileId      String?
   profile        Profile?     @relation(fields: [profileId], references: [id], onDelete: SetNull)

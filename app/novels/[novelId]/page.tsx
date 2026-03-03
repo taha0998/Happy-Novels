@@ -1,11 +1,12 @@
 import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import { NovelComments } from "@/features/comments/components/NovelComments";
 import { NovelCard } from "@/features/novel/components/novelcard/NovelCard";
 import { NovelChapters } from "@/features/novel/components/NovelChapters";
 import { NovelChaptersLoader } from "@/features/novel/components/NovelChaptersLoader";
+import { NovelComments } from "@/features/novel/components/NovelComments";
 import { NovelRecommendations } from "@/features/novel/components/novelRecommendation/NovelRecommendations";
 import { getNovel } from "@/features/novel/queries/get-novel";
+import { getNovelComments } from "@/features/novel/queries/get-novel-comments";
 import { searchParamsCache } from "@/features/novel/searchParams";
 
 type NovelPageProps = {
@@ -19,7 +20,14 @@ export const ravalidate = 30;
 
 const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
   const { novelId } = await params;
-  const novel = await getNovel(novelId);
+  const novelPromise = getNovel(novelId);
+  const paginatedCommentsPromise = getNovelComments(novelId);
+
+  const [novel, paginatedComments] = await Promise.all([
+    novelPromise,
+    paginatedCommentsPromise,
+  ]);
+
   const recommendedNovels = novel?.recommendations.flatMap(
     (r) => r.recommendedNovelId,
   );
@@ -59,7 +67,7 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
           target={false}
         />
       )}
-      <NovelComments />
+      <NovelComments paginatedComments={paginatedComments} />
     </div>
   );
 };

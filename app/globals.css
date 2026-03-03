@@ -6,7 +6,6 @@
 
 :root {
   --orange: oklab(72.068% 0.13497 0.11565);
-  --white: #efeeea;
   --background: oklch(0.9488 0.0054 95.1013);
   --foreground: oklch(0.3552 0.0409 238.6529);
   --card: oklch(0.9731 0.0041 91.4462);
@@ -16,7 +15,7 @@
   --primary: oklch(0.7207 0.1778 40.6074);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.9 0.0068 97.3606);
-  --secondary-foreground: oklch(0.3552 0.0409 238.6529);
+  --secondary-foreground: oklch(45.147% 0.05475 239.243);
   --muted: oklch(0.918 0.0081 98.8869);
   --muted-foreground: oklch(0.5299 0.0333 237.4504);
   --accent: oklch(0.7207 0.1778 40.6074);
