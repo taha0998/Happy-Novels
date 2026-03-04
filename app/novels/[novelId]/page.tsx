@@ -67,7 +67,7 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
           target={false}
         />
       )}
-      <NovelComments paginatedComments={paginatedComments} />
+      <NovelComments paginatedComments={paginatedComments} novelId={novel.id} />
     </div>
   );
 };

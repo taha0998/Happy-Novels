@@ -5,6 +5,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Footer } from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "./_navigation/Header";
+import { ReactQueryProvider } from "./_providers/react-query-provider";
 
 const rubik = Rubik({
   subsets: ["latin"],
@@ -38,10 +39,12 @@ export default function RootLayout({
         className={`${rubik.className} ${geistSans.variable} ${geistMono.variable} antialiased flex flex-col`}
       >
         <NuqsAdapter>
-          <Header />
-          {children}
-          <Footer />
-          <Toaster expand />
+          <ReactQueryProvider>
+            <Header />
+            {children}
+            <Footer />
+            <Toaster expand />
+          </ReactQueryProvider>
         </NuqsAdapter>
       </body>
     </html>

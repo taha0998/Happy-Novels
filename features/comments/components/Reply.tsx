@@ -3,12 +3,13 @@ import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../../../components/ui/button";
+import { NovelCommentReplyWithMetadata } from "../types";
 
 type ReplyProps = {
-  content: string;
+  reply: NovelCommentReplyWithMetadata | undefined;
 };
 
-const Reply = ({ content }: ReplyProps) => {
+const Reply = ({ reply }: ReplyProps) => {
   const [isOpen, setOpen] = useState(false);
   const [isTruncated, setTruncated] = useState(false);
   const replyRef = useRef<HTMLParagraphElement>(null);
@@ -33,7 +34,7 @@ const Reply = ({ content }: ReplyProps) => {
           alt="user logo"
           width={80}
           height={80}
-          className="rounded-full max-h-20"
+          className="rounded-full h-20 w-20"
         />
         <p
           className={clsx("font-medium", {
@@ -44,8 +45,10 @@ const Reply = ({ content }: ReplyProps) => {
           ref={replyRef}
           onClick={handleOpen}
         >
-          <span className="text-secondary-foreground">@Rr599: </span>
-          {content}
+          <span className="text-secondary-foreground">
+            @{reply?.profile.username}:
+          </span>
+          {reply?.content}
         </p>
       </div>
       <div>
@@ -60,13 +63,6 @@ const Reply = ({ content }: ReplyProps) => {
             like
           </Button>
         </div>
-        {/* <img
-          src="https://yuzykc5xj5.ufs.sh/f/9ZvEbi04z0PNvGv2gQl3IxdhR2k0q7WrupQnHbNFwtA8KOJ6"
-          alt="dots icon"
-          width={66}
-          height={66}
-          className="cursor-pointer relative bottom-10"
-        /> */}
       </div>
     </>
   );

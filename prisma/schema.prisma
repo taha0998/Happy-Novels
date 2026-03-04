@@ -152,15 +152,15 @@ model ChapterComment {
 }
 
 model NovelComment {
-  id                String              @id @default(cuid())
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  content           String
-  profileId         String
-  profile           Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  novelId           String
-  novel             Novel               @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelCommentReply NovelCommentReply[]
+  id                 String              @id @default(cuid())
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  content            String
+  profileId          String
+  profile            Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  novelId            String
+  novel              Novel               @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  novelCommentReplys NovelCommentReply[]
 
   @@index([profileId])
   @@index([novelId])
@@ -171,8 +171,8 @@ model NovelCommentReply {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   content        String
-  profileId      String?
-  profile        Profile?     @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  profileId      String
+  profile        Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
   novelcommentId String
   novelComment   NovelComment @relation(fields: [novelcommentId], references: [id], onDelete: Cascade)
 

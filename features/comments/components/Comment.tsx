@@ -2,17 +2,25 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { getNovelCommentsReplys } from "@/features/novel/queries/get-novel-comments-replys";
+import { PaginationData } from "@/types/PaginationData";
 import { Button } from "../../../components/ui/button";
+import {
+  NovelCommentReplyWithMetadata,
+  NovelCommentWithMetadata,
+} from "../types";
 import { Replys } from "./Replys";
 
 type CommentProps = {
-  content: string;
+  comment: NovelCommentWithMetadata;
 };
 
-const Comment = ({ content }: CommentProps) => {
+const Comment = ({ comment }: CommentProps) => {
   const [isOpen, setOpen] = useState(false);
   const [isTruncated, setTruncated] = useState(false);
   const commentRef = useRef<HTMLParagraphElement>(null);
+  const [paginatedReplys, setReplys] =
+    useState<PaginationData<NovelCommentReplyWithMetadata> | null>(null);
 
   useEffect(() => {
     const element = commentRef.current;
@@ -20,6 +28,16 @@ const Comment = ({ content }: CommentProps) => {
       setTruncated(element.scrollHeight > element.clientHeight);
     }
   }, [commentRef]);
+
+  useEffect(() => {
+    const getReplys = async () => {
+      const replys = await getNovelCommentsReplys(comment.id);
+      if (replys) {
+        setReplys(replys);
+      }
+    };
+    getReplys();
+  }, [comment]);
 
   const handleOpen = () => {
     if (isTruncated) {
@@ -37,19 +55,19 @@ const Comment = ({ content }: CommentProps) => {
             alt="user logo"
             width={80}
             height={80}
-            className="rounded-full max-h-20"
+            className="rounded-full h-20 w-20"
           />
           <p
             ref={commentRef}
-            className={clsx("font-medium break-all", {
+            className={clsx("font-medium", {
               "line-clamp-3": !isOpen,
               "cursor-pointer": !isOpen && isTruncated,
               "cursor-default": !isTruncated,
             })}
             onClick={handleOpen}
           >
-            <span className="text-primary">@Dr567: </span>
-            {content}
+            <span className="text-primary">@{comment.profile.username}: </span>
+            {comment.content}
           </p>
         </div>
         <div>
@@ -64,8 +82,8 @@ const Comment = ({ content }: CommentProps) => {
               like
             </Button>
           </div>
-          <Replys />
         </div>
+        <Replys paginatedReplys={paginatedReplys} commentId={comment.id} />
       </div>
     </>
   );
