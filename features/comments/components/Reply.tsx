@@ -46,7 +46,7 @@ const Reply = ({ reply }: ReplyProps) => {
           onClick={handleOpen}
         >
           <span className="text-secondary-foreground">
-            @{reply?.profile.username}:
+            @{reply?.profile.username}:{" "}
           </span>
           {reply?.content}
         </p>

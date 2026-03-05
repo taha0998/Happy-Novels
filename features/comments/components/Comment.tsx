@@ -2,25 +2,20 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { getNovelCommentsReplys } from "@/features/novel/queries/get-novel-comments-replys";
-import { PaginationData } from "@/types/PaginationData";
 import { Button } from "../../../components/ui/button";
-import {
-  NovelCommentReplyWithMetadata,
-  NovelCommentWithMetadata,
-} from "../types";
+import { NovelCommentWithMetadata } from "../types";
 import { Replys } from "./Replys";
 
 type CommentProps = {
   comment: NovelCommentWithMetadata;
+  novelId: string;
 };
 
-const Comment = ({ comment }: CommentProps) => {
+const Comment = ({ comment, novelId }: CommentProps) => {
   const [isOpen, setOpen] = useState(false);
   const [isTruncated, setTruncated] = useState(false);
   const commentRef = useRef<HTMLParagraphElement>(null);
-  const [paginatedReplys, setReplys] =
-    useState<PaginationData<NovelCommentReplyWithMetadata> | null>(null);
+  const [showReplyForm, setShowReplyForm] = useState(false);
 
   useEffect(() => {
     const element = commentRef.current;
@@ -28,16 +23,6 @@ const Comment = ({ comment }: CommentProps) => {
       setTruncated(element.scrollHeight > element.clientHeight);
     }
   }, [commentRef]);
-
-  useEffect(() => {
-    const getReplys = async () => {
-      const replys = await getNovelCommentsReplys(comment.id);
-      if (replys) {
-        setReplys(replys);
-      }
-    };
-    getReplys();
-  }, [comment]);
 
   const handleOpen = () => {
     if (isTruncated) {
@@ -66,7 +51,9 @@ const Comment = ({ comment }: CommentProps) => {
             })}
             onClick={handleOpen}
           >
-            <span className="text-primary">@{comment.profile.username}: </span>
+            <span className="text-primary">
+              @{comment.profile.username ?? "haha"}:{" "}
+            </span>
             {comment.content}
           </p>
         </div>
@@ -75,6 +62,7 @@ const Comment = ({ comment }: CommentProps) => {
             <Button
               variant="ghost"
               className="text-[35px] py-7 text-secondary-foreground hover:bg-foreground"
+              onClick={() => setShowReplyForm((state) => !state)}
             >
               reply
             </Button>
@@ -83,7 +71,13 @@ const Comment = ({ comment }: CommentProps) => {
             </Button>
           </div>
         </div>
-        <Replys paginatedReplys={paginatedReplys} commentId={comment.id} />
+        <Replys
+          commentId={comment.id}
+          showReplyForm={showReplyForm}
+          setShowReplyForm={setShowReplyForm}
+          novelId={novelId}
+          replyCount={comment.novelCommentReplys.length}
+        />
       </div>
     </>
   );

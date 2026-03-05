@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 
 export const getNovelComments = async (novelId: string, cursor?: string) => {
     const { user } = await getAuth();
-    const take = 1;
+    const take = 10;
     const where = {
         novelId,
         id: {

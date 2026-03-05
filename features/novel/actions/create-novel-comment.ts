@@ -1,0 +1,37 @@
+'use server';
+
+import { revalidatePath } from "next/cache";
+import z from "zod";
+import { ActionState, fromErrorToActionState, toActionState } from "@/components/form/utils/to-action-state";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { NovelPath } from "@/lib/paths";
+import { prisma } from "@/lib/prisma";
+
+const createNovelCommentShema = z.object({
+    content: z.string().min(1, { message: "Please enter a comment before submitting." }).max(1024),
+})
+
+
+export const createNovelComment = async (novelId: string, _actionState: ActionState, formData: FormData) => {
+    const { user } = await getAuthOrRedirect()
+
+    if (!user?.profile[0] || !user) {
+        return toActionState('ERROR', 'not Auth')
+    }
+    try {
+        const data = createNovelCommentShema.parse(Object.fromEntries(formData))
+
+        await prisma.novelComment.create({
+            data: {
+                novelId,
+                profileId: user.profile[0].id,
+                ...data,
+            },
+        })
+
+    } catch (error) {
+        return fromErrorToActionState(error)
+    }
+    revalidatePath(NovelPath(novelId))
+    return toActionState('SUCCESS', 'Comment created')
+}
