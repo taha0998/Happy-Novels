@@ -12,7 +12,7 @@ const createNovelReplyCommentShema = z.object({
 })
 
 
-export const createNovelReplyComment = async (commentId: string, novelId: string, _actionState: ActionState, formData: FormData) => {
+export const createNovelReplyComment = async (commentId: string, novelId: string, isReply: boolean, _actionState: ActionState, formData: FormData) => {
     const { user } = await getAuthOrRedirect();
 
     if (!user || !user.profile) {
@@ -23,11 +23,25 @@ export const createNovelReplyComment = async (commentId: string, novelId: string
         const data = createNovelReplyCommentShema.parse(
             Object.fromEntries(formData)
         );
+        const comment = await prisma.novelComment.findUnique({
+            where: { id: commentId }
+        })
+        const profile = await prisma.profile.findUnique({
+            where: { id: comment?.profileId }
+        })
+
+        let replyTo;
+
+        if (isReply) {
+            replyTo = profile?.username
+        }
+
 
         await prisma.novelCommentReply.create({
             data: {
                 novelcommentId: commentId,
                 profileId: user.profile[0].id,
+                replyTo,
                 ...data
             }
         })

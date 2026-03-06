@@ -10,7 +10,7 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
     const where = {
         novelcommentId,
         id: {
-            lt: cursor,
+            gt: cursor,
         }
     };
 
@@ -18,7 +18,7 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
     let [replys, count] = await prisma.$transaction([
         prisma.novelCommentReply.findMany({
             where,
-            orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+            orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
             take: take + 1,
             include: {
                 profile: {

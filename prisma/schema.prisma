@@ -36,6 +36,7 @@ model Profile {
   chapterComments        ChapterComment[]
   novelComments          NovelComment[]
   novelCommentReplies    NovelCommentReply[]
+  LinkNovelCommentLikes  LinkNovelCommentLikes[]
 
   @@index([userId])
 }
@@ -152,18 +153,32 @@ model ChapterComment {
 }
 
 model NovelComment {
-  id                 String              @id @default(cuid())
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  content            String
-  profileId          String
-  profile            Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  novelId            String
-  novel              Novel               @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  novelCommentReplys NovelCommentReply[]
+  id                    String                  @id @default(cuid())
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  content               String
+  profileId             String
+  profile               Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  novelId               String
+  novel                 Novel                   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  novelCommentReplys    NovelCommentReply[]
+  LinkNovelCommentLikes LinkNovelCommentLikes[]
 
   @@index([profileId])
   @@index([novelId])
+}
+
+model LinkNovelCommentLikes {
+  id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  profileId      String
+  profile        Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  NovelCommentId String
+  NovelComment   NovelComment @relation(fields: [NovelCommentId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, NovelCommentId])
+  @@index([profileId])
+  @@index([NovelCommentId])
 }
 
 model NovelCommentReply {
@@ -175,6 +190,7 @@ model NovelCommentReply {
   profile        Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
   novelcommentId String
   novelComment   NovelComment @relation(fields: [novelcommentId], references: [id], onDelete: Cascade)
+  replyTo        String?
 
   @@index([profileId])
   @@index([novelcommentId])

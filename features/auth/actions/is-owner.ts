@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 
 type Entity = { profileId: string }
 
-export const isOwner = async (
+export const isOwner = (
     authUser: User | null | undefined,
     entity: Entity | null | undefined
 ) => {

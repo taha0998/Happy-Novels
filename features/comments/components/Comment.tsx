@@ -2,6 +2,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { addNovelCommentLike } from "@/features/novel/actions/add-novel-comment-like";
 import { Button } from "../../../components/ui/button";
 import { NovelCommentWithMetadata } from "../types";
 import { Replys } from "./Replys";
@@ -29,6 +30,7 @@ const Comment = ({ comment, novelId }: CommentProps) => {
       setOpen((state) => !state);
     }
   };
+
   return (
     <>
       <div className="flex flex-col gap-2 ">
@@ -66,9 +68,11 @@ const Comment = ({ comment, novelId }: CommentProps) => {
             >
               reply
             </Button>
-            <Button variant="ghost" className="text-[35px] py-7 text-primary">
-              like
-            </Button>
+            <form action={() => addNovelCommentLike(comment.id, novelId)}>
+              <Button variant="ghost" className="text-[35px] py-7 text-primary">
+                like({comment.totalLikes})
+              </Button>
+            </form>
           </div>
         </div>
         <Replys

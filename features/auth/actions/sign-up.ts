@@ -1,7 +1,8 @@
 "use server"
+import { Prisma } from "@prisma/client"
 import { redirect } from "next/navigation"
 import z from "zod"
-import { ActionState, fromErrorToActionState } from "@/components/form/utils/to-action-state"
+import { ActionState, fromErrorToActionState, toActionState } from "@/components/form/utils/to-action-state"
 import { hashPassword } from "@/features/password/utils/hash-and-verify"
 import { createSession } from "@/lib/oslo"
 import { HomePath } from "@/lib/paths"
@@ -51,6 +52,11 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
         await setSessionCookie(sessionToken, session.expiresAt)
 
     } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                return toActionState('ERROR', 'An account with this email already exists', formData)
+            }
+        }
         return fromErrorToActionState(error, formData)
     }
     redirect(HomePath())

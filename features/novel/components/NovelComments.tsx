@@ -22,7 +22,7 @@ const NovelComments = ({ paginatedComments, novelId }: NovelCommentsProps) => {
       queryFn: ({ pageParam }) => getNovelComments(novelId, pageParam),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) =>
-        lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
+        lastPage?.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
       initialData: {
         pages: [
           {

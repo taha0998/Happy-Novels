@@ -10,28 +10,26 @@ import { createNovelReplyComment } from "../../actions/create-novel-reply-commen
 
 type NovelCommentReplyCreateFormProps = {
   commentId: string;
-  hideReplyForm: () => void;
+  handleSuccess: () => void;
   novelId: string;
+  isReply?: boolean;
 };
 
 const NovelCommentReplyCreateForm = ({
   commentId,
-  hideReplyForm,
+  handleSuccess,
   novelId,
+  isReply = false,
 }: NovelCommentReplyCreateFormProps) => {
   const [actionState, action] = useActionState(
-    createNovelReplyComment.bind(null, commentId, novelId),
+    createNovelReplyComment.bind(null, commentId, novelId, isReply),
     EPMTY_ACTION_STATE,
   );
 
-  const handleSuccess = () => {
-    hideReplyForm();
-  };
   return (
     <Form
       actionState={actionState}
       action={action}
-      //   onSuccess={handleSuccess}
       className="flex flex-col ml-27.5"
       onSuccess={handleSuccess}
     >

@@ -20,12 +20,18 @@ export const createNovelComment = async (novelId: string, _actionState: ActionSt
     }
     try {
         const data = createNovelCommentShema.parse(Object.fromEntries(formData))
+        const profileId = user.profile[0].id;
 
         await prisma.novelComment.create({
             data: {
                 novelId,
-                profileId: user.profile[0].id,
-                ...data,
+                profileId,
+                content: data.content,
+                LinkNovelCommentLikes: {
+                    create: {
+                        profileId,
+                    }
+                }
             },
         })
 

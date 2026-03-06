@@ -39,7 +39,7 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
   const ParsedSearchParams = await searchParamsCache.parse(searchParams);
   const key = ParsedSearchParams.chaptersPage;
 
-  if (!novel) {
+  if (!novel || !paginatedComments) {
     return;
   }
   return (
@@ -67,7 +67,12 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
           target={false}
         />
       )}
-      <NovelComments paginatedComments={paginatedComments} novelId={novel.id} />
+      {paginatedComments && (
+        <NovelComments
+          paginatedComments={paginatedComments}
+          novelId={novel.id}
+        />
+      )}
     </div>
   );
 };

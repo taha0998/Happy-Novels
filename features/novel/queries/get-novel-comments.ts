@@ -1,17 +1,30 @@
 "use server";
 
 import { isOwner } from "@/features/auth/actions/is-owner";
-import { getAuth } from "@/features/auth/queries/get-auth";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { prisma } from "@/lib/prisma";
 
 export const getNovelComments = async (novelId: string, cursor?: string) => {
-    const { user } = await getAuth();
+    const { user } = await getAuthOrRedirect();
+    const profileId = user?.profile[0]?.id;
+
     const take = 10;
     const where = {
         novelId,
         id: {
             lt: cursor,
         }
+    }
+
+    if (!user) {
+        return {
+            list: [],
+            metadata: {
+                count: 0,
+                hasNextPage: false,
+                cursor: undefined
+            }
+        };
     }
 
     // eslint-disable-next-line prefer-const
@@ -36,7 +49,14 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
                             }
                         }
                     }
-                }
+                },
+                _count: {
+                    select: { LinkNovelCommentLikes: true }
+                },
+                LinkNovelCommentLikes: profileId ? {
+                    where: { profileId, },
+                    select: { id: true }
+                } : false,
             }
         }),
         prisma.novelComment.count({
@@ -47,10 +67,14 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
     comments = hasNextPage ? comments.slice(0, -1) : comments;
 
     return ({
-        list: comments.map(comment => ({
+        list: comments.map((comment) => ({
             ...comment,
-            isOwner: isOwner(user, comment)
-        })),
+            isOwner: isOwner(user, comment) ?? false,
+            isLiked: comment.LinkNovelCommentLikes.length > 0,
+            totalLikes: comment._count.LinkNovelCommentLikes,
+        })
+
+        ),
         metadata: {
             count,
             hasNextPage,

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, Fragment, SetStateAction } from "react";
 import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
 import { NovelCommentReplyCreateForm } from "@/features/novel/components/forms/NovelCommentReplyCreateForm";
 import { getNovelCommentsReplys } from "@/features/novel/queries/get-novel-comments-replys";
@@ -65,7 +65,7 @@ const Replys = ({
         <div className="mb-10">
           <NovelCommentReplyCreateForm
             commentId={commentId}
-            hideReplyForm={handleSuccess}
+            handleSuccess={handleSuccess}
             novelId={novelId}
           />
         </div>
@@ -77,7 +77,15 @@ const Replys = ({
       ) : (
         <div className="flex flex-col ml-27.5 gap-2 max-w-300">
           {replys?.map((reply) => (
-            <Reply key={reply.id} reply={reply} />
+            <Fragment key={reply.id}>
+              <Reply
+                key={reply.id}
+                reply={reply}
+                commentId={commentId}
+                novelId={novelId}
+                handleSuccess={handleSuccess}
+              />
+            </Fragment>
           ))}
           {isFetchingNextPage && <CommentSkeleton />}
           {hasNextPage && (

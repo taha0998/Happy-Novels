@@ -8,9 +8,15 @@ export type NovelCommentWithMetadata = Prisma.NovelCommentGetPayload<{
                 userId: true
             }
         },
-        novelCommentReplys: true
+        novelCommentReplys: { include: { profile: { select: { username: true, userId: true } } } },
+        LinkNovelCommentLikes: true,
+        _count: { select: { LinkNovelCommentLikes: true } }
     }
-}>;
+}> & {
+    isOwner: boolean,
+    isLiked: boolean,
+    totalLikes: number
+};
 
 export type NovelCommentReplyWithMetadata = Prisma.NovelCommentReplyGetPayload<{
     include: {
