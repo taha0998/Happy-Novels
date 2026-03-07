@@ -26,14 +26,14 @@ export const createNovelReplyComment = async (commentId: string, novelId: string
         const comment = await prisma.novelComment.findUnique({
             where: { id: commentId }
         })
-        const profile = await prisma.profile.findUnique({
+        const replyToProfile = await prisma.profile.findUnique({
             where: { id: comment?.profileId }
         })
 
         let replyTo;
 
         if (isReply) {
-            replyTo = profile?.username
+            replyTo = replyToProfile?.username
         }
 
 

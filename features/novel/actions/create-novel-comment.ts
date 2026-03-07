@@ -27,11 +27,6 @@ export const createNovelComment = async (novelId: string, _actionState: ActionSt
                 novelId,
                 profileId,
                 content: data.content,
-                LinkNovelCommentLikes: {
-                    create: {
-                        profileId,
-                    }
-                }
             },
         })
 

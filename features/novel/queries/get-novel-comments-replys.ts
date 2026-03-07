@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 
 export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: string, takeComments?: number) => {
     const { user } = await getAuth();
+    const profileId = user?.profile[0].id
+
     const take = takeComments ? takeComments : 1;
     const where = {
         novelcommentId,
@@ -27,6 +29,11 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
                         userId: true
                     }
                 },
+                LinkNovelCommentReplyLikes: true,
+                _count: {
+                    select: { LinkNovelCommentReplyLikes: true }
+                }
+
             }
         }),
         prisma.novelCommentReply.count({
@@ -41,7 +48,9 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
     return ({
         list: replys.map(reply => ({
             ...reply,
-            isOwner: isOwner(user, reply)
+            isOwner: isOwner(user, reply) ?? false,
+            isLiked: reply.LinkNovelCommentReplyLikes.some(likedByProfile => likedByProfile.profileId === profileId),
+            totalLikes: reply._count.LinkNovelCommentReplyLikes
         })),
         metadata: {
             count,

@@ -1,3 +1,6 @@
+"use client";
+import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
 import { fixedRatingCount } from "../../utils/fixedRatingCount";
 
 type NovelCardTitleBarProps = {
@@ -11,9 +14,34 @@ const NovelCardTitleBar = ({
   rating,
   ratingCount,
 }: NovelCardTitleBarProps) => {
+  const [isOpen, setOpen] = useState(false);
+  const [isTruncated, setTruncated] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const element = titleRef.current;
+    if (element) {
+      setTruncated(element.scrollHeight > element.clientHeight);
+    }
+  }, [title]);
+
+  const handleOpen = () => {
+    if (isTruncated) {
+      setOpen((state) => !state);
+    }
+  };
+
   return (
     <div className="flex gap-8 w-full justify-between items-center">
-      <h1 className="text-[100px] font-semibold line-clamp-3 wrap-break-word">
+      <h1
+        className={clsx("text-[100px] font-semibold wrap-break-word", {
+          "line-clamp-3": !isOpen,
+          "cursor-pointer": !isOpen && isTruncated,
+          "cursor-default": !isTruncated,
+        })}
+        ref={titleRef}
+        onClick={handleOpen}
+      >
         {title}
       </h1>
       <div className="flex flex-col items-center relative">

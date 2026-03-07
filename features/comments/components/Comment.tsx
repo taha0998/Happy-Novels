@@ -2,7 +2,9 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
 import { addNovelCommentLike } from "@/features/novel/actions/add-novel-comment-like";
+import { removeNovelCommentLike } from "@/features/novel/actions/remove-novel-comment-like";
 import { Button } from "../../../components/ui/button";
 import { NovelCommentWithMetadata } from "../types";
 import { Replys } from "./Replys";
@@ -17,6 +19,40 @@ const Comment = ({ comment, novelId }: CommentProps) => {
   const [isTruncated, setTruncated] = useState(false);
   const commentRef = useRef<HTMLParagraphElement>(null);
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const [likes, setLikes] = useState(comment.totalLikes);
+  const [isLiked, setIsLiked] = useState(comment.isLiked);
+
+  // const queryClient = useQueryClient();
+
+  // const handleLikeComment = async () => {
+  //   await (comment.isLiked
+  //     ? removeNovelCommentLike(comment.id)
+  //     : addNovelCommentLike(comment.id));
+
+  //   queryClient.invalidateQueries({
+  //     queryKey: ["comments", novelId],
+  //   });
+  // };
+
+  const handleOpen = () => {
+    if (isTruncated) {
+      setOpen((state) => !state);
+    }
+  };
+  const handelLike = () => {
+    if (isLiked) {
+      setLikes((state) => state - 1);
+    } else {
+      setLikes((state) => state + 1);
+    }
+    setIsLiked((state) => !state);
+  };
+
+  const handleLikeAction = async () => {
+    await (comment.isLiked
+      ? removeNovelCommentLike(comment.id)
+      : addNovelCommentLike(comment.id));
+  };
 
   useEffect(() => {
     const element = commentRef.current;
@@ -24,13 +60,6 @@ const Comment = ({ comment, novelId }: CommentProps) => {
       setTruncated(element.scrollHeight > element.clientHeight);
     }
   }, [commentRef]);
-
-  const handleOpen = () => {
-    if (isTruncated) {
-      setOpen((state) => !state);
-    }
-  };
-
   return (
     <>
       <div className="flex flex-col gap-2 ">
@@ -68,10 +97,12 @@ const Comment = ({ comment, novelId }: CommentProps) => {
             >
               reply
             </Button>
-            <form action={() => addNovelCommentLike(comment.id, novelId)}>
-              <Button variant="ghost" className="text-[35px] py-7 text-primary">
-                like({comment.totalLikes})
-              </Button>
+            <form action={handleLikeAction}>
+              <CommentLikeButton
+                likes={likes}
+                isLiked={isLiked}
+                onClick={handelLike}
+              />
             </form>
           </div>
         </div>

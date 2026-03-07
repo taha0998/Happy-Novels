@@ -25,6 +25,12 @@ export type NovelCommentReplyWithMetadata = Prisma.NovelCommentReplyGetPayload<{
                 username: true,
                 userId: true
             }
-        }
+        },
+        LinkNovelCommentReplyLikes: true,
+        _count: { select: { LinkNovelCommentReplyLikes: true } }
     }
-}>
+}> & {
+    isOwner: boolean,
+    isLiked: boolean,
+    totalLikes: number
+}

@@ -2,12 +2,15 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
+import { addNovelCommentReplyLike } from "@/features/novel/actions/add-novel-comment-reply-like";
+import { removeNovelCommentReplyLike } from "@/features/novel/actions/remove-novel-comment-reply-like";
 import { NovelCommentReplyCreateForm } from "@/features/novel/components/forms/NovelCommentReplyCreateForm";
 import { Button } from "../../../components/ui/button";
 import { NovelCommentReplyWithMetadata } from "../types";
 
 type ReplyProps = {
-  reply: NovelCommentReplyWithMetadata | undefined;
+  reply: NovelCommentReplyWithMetadata;
   commentId: string;
   novelId: string;
   handleSuccess: () => void;
@@ -18,6 +21,34 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
   const [isTruncated, setTruncated] = useState(false);
   const replyRef = useRef<HTMLParagraphElement>(null);
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const [likes, setLikes] = useState(reply?.totalLikes);
+  const [isLiked, setIsLiked] = useState(reply.isLiked);
+
+  const handleOpen = () => {
+    if (isTruncated) {
+      setOpen((state) => !state);
+    }
+  };
+
+  const handleSuccessReply = () => {
+    setShowReplyForm(false);
+    handleSuccess();
+  };
+
+  const handleLike = () => {
+    if (isLiked) {
+      setLikes((state) => state - 1);
+    } else {
+      setLikes((state) => state + 1);
+    }
+    setIsLiked((state) => !state);
+  };
+
+  const handleLikeAction = async () => {
+    await (reply.isLiked
+      ? removeNovelCommentReplyLike(reply.id)
+      : addNovelCommentReplyLike(reply.id));
+  };
 
   useEffect(() => {
     const element = replyRef.current;
@@ -25,15 +56,6 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
       setTruncated(element.scrollHeight > element.clientHeight);
     }
   }, [replyRef]);
-
-  const handleOpen = () => {
-    setOpen((state) => !state);
-  };
-
-  const handleSuccessReply = () => {
-    setShowReplyForm(false);
-    handleSuccess();
-  };
 
   return (
     <>
@@ -74,9 +96,13 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
           >
             reply
           </Button>
-          <Button variant="ghost" className="text-[35px] py-7 text-primary">
-            like
-          </Button>
+          <form action={handleLikeAction}>
+            <CommentLikeButton
+              likes={likes}
+              isLiked={isLiked}
+              onClick={handleLike}
+            />
+          </form>
         </div>
       </div>
       {showReplyForm && (
