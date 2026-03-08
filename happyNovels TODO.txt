@@ -1,4 +1,2 @@
-//profile form 
-//recommendation
-//novel comments
-//chapter page
+//DeleteComments Button Action 
+// reply to fix

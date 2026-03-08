@@ -1,12 +1,11 @@
 "use server";
 
 import { isOwner } from "@/features/auth/actions/is-owner";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
 export const getNovelComments = async (novelId: string, cursor?: string) => {
-    const { user } = await getAuthOrRedirect();
-    const profileId = user?.profile[0].id
+    const profile = await getProfile()
 
     const take = 10;
     const where = {
@@ -57,8 +56,8 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
     return ({
         list: comments.map((comment) => ({
             ...comment,
-            isOwner: isOwner(user, comment) ?? false,
-            isLiked: comment.LinkNovelCommentLikes.some(likedByProfile => likedByProfile.profileId === profileId),
+            isOwner: isOwner(profile, comment) ?? false,
+            isLiked: comment.LinkNovelCommentLikes.some(likedByProfile => likedByProfile.profileId === profile.id),
             totalLikes: comment._count.LinkNovelCommentLikes,
         })
 

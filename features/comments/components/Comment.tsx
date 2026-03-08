@@ -1,10 +1,15 @@
 "use client";
+import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
-import { addNovelCommentLike } from "@/features/novel/actions/add-novel-comment-like";
-import { removeNovelCommentLike } from "@/features/novel/actions/remove-novel-comment-like";
+import { useConfirmDialog } from "@/components/useConfirmDialog";
+import { isOwner } from "@/features/auth/actions/is-owner";
+import { useProfile } from "@/features/auth/queries/useProfile";
+import { addNovelCommentLike } from "@/features/novel/actions/commentsActions/add-novel-comment-like";
+import { removeNovelComment } from "@/features/novel/actions/commentsActions/remove-novel-comment";
+import { removeNovelCommentLike } from "@/features/novel/actions/commentsActions/remove-novel-comment-like";
 import { Button } from "../../../components/ui/button";
 import { NovelCommentWithMetadata } from "../types";
 import { Replys } from "./Replys";
@@ -21,18 +26,25 @@ const Comment = ({ comment, novelId }: CommentProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [likes, setLikes] = useState(comment.totalLikes);
   const [isLiked, setIsLiked] = useState(comment.isLiked);
+  const [profile] = useProfile();
 
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-  // const handleLikeComment = async () => {
-  //   await (comment.isLiked
-  //     ? removeNovelCommentLike(comment.id)
-  //     : addNovelCommentLike(comment.id));
-
-  //   queryClient.invalidateQueries({
-  //     queryKey: ["comments", novelId],
-  //   });
-  // };
+  const [deleteButton, confirmDelete] = useConfirmDialog({
+    trigger: (
+      <Button
+        variant={"ghost"}
+        className="text-[35px] py-7 text-[#FE5311] hover:bg-[#FE5311]"
+      >
+        delete
+      </Button>
+    ),
+    action: removeNovelComment.bind(null, comment.id),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["comments", novelId],
+      }),
+  });
 
   const handleOpen = () => {
     if (isTruncated) {
@@ -82,14 +94,18 @@ const Comment = ({ comment, novelId }: CommentProps) => {
             })}
             onClick={handleOpen}
           >
-            <span className="text-primary">
-              @{comment.profile.username ?? "haha"}:{" "}
-            </span>
+            <span className="text-primary">@{comment.profile.username}: </span>
             {comment.content}
           </p>
         </div>
         <div>
           <div className="flex gap-0 w-full justify-end items-center">
+            {isOwner(profile, comment) && (
+              <>
+                {confirmDelete}
+                {deleteButton}
+              </>
+            )}
             <Button
               variant="ghost"
               className="text-[35px] py-7 text-secondary-foreground hover:bg-foreground"

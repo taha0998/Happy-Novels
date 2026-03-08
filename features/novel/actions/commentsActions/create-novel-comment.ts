@@ -1,10 +1,8 @@
 'use server';
 
-import { revalidatePath } from "next/cache";
 import z from "zod";
 import { ActionState, fromErrorToActionState, toActionState } from "@/components/form/utils/to-action-state";
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { NovelPath } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
 
 const createNovelCommentShema = z.object({
@@ -33,6 +31,5 @@ export const createNovelComment = async (novelId: string, _actionState: ActionSt
     } catch (error) {
         return fromErrorToActionState(error)
     }
-    revalidatePath(NovelPath(novelId))
     return toActionState('SUCCESS', 'Comment created')
 }

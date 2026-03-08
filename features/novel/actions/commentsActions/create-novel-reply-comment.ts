@@ -12,30 +12,36 @@ const createNovelReplyCommentShema = z.object({
 })
 
 
-export const createNovelReplyComment = async (commentId: string, novelId: string, isReply: boolean, _actionState: ActionState, formData: FormData) => {
+export const createNovelReplyComment = async (commentId: string, novelId: string, isReply: boolean, replyId: string | undefined, _actionState: ActionState, formData: FormData) => {
     const { user } = await getAuthOrRedirect();
 
     if (!user || !user.profile) {
         return toActionState('ERROR', 'no auth')
+    }
+    if (isReply && !replyId) {
+        return toActionState('ERROR', 'Target Reply is missing.')
     }
 
     try {
         const data = createNovelReplyCommentShema.parse(
             Object.fromEntries(formData)
         );
-        const comment = await prisma.novelComment.findUnique({
-            where: { id: commentId }
-        })
-        const replyToProfile = await prisma.profile.findUnique({
-            where: { id: comment?.profileId }
-        })
 
+        let comment;
         let replyTo;
-
         if (isReply) {
+            comment = await prisma.novelCommentReply.findUnique({
+                where: { id: replyId }
+            })
+            const replyToProfile = await prisma.profile.findUnique({
+                where: { id: comment?.profileId }
+            })
             replyTo = replyToProfile?.username
+        } else {
+            comment = await prisma.novelComment.findUnique({
+                where: { id: commentId }
+            })
         }
-
 
         await prisma.novelCommentReply.create({
             data: {

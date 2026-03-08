@@ -1,10 +1,15 @@
 "use client";
+import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
-import { addNovelCommentReplyLike } from "@/features/novel/actions/add-novel-comment-reply-like";
-import { removeNovelCommentReplyLike } from "@/features/novel/actions/remove-novel-comment-reply-like";
+import { useConfirmDialog } from "@/components/useConfirmDialog";
+import { isOwner } from "@/features/auth/actions/is-owner";
+import { useProfile } from "@/features/auth/queries/useProfile";
+import { addNovelCommentReplyLike } from "@/features/novel/actions/commentsActions/add-novel-comment-reply-like";
+import { removeNovelCommentReply } from "@/features/novel/actions/commentsActions/remove-novel-comment-reply";
+import { removeNovelCommentReplyLike } from "@/features/novel/actions/commentsActions/remove-novel-comment-reply-like";
 import { NovelCommentReplyCreateForm } from "@/features/novel/components/forms/NovelCommentReplyCreateForm";
 import { Button } from "../../../components/ui/button";
 import { NovelCommentReplyWithMetadata } from "../types";
@@ -23,6 +28,23 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [likes, setLikes] = useState(reply?.totalLikes);
   const [isLiked, setIsLiked] = useState(reply.isLiked);
+  const [profile] = useProfile();
+
+  const queryClient = useQueryClient();
+
+  const [deleteButton, deleteDialog] = useConfirmDialog({
+    trigger: (
+      <Button
+        variant={"ghost"}
+        className="text-[35px] py-7 text-[#FE5311] hover:bg-[#FE5311]"
+      >
+        delete
+      </Button>
+    ),
+    action: removeNovelCommentReply.bind(null, reply.id),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["replys", commentId] }),
+  });
 
   const handleOpen = () => {
     if (isTruncated) {
@@ -78,17 +100,24 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
           ref={replyRef}
           onClick={handleOpen}
         >
-          <span className="text-[#FE5311]">
-            {reply?.replyTo ? `@${reply.replyTo}` : ""}
-          </span>
           <span className="text-secondary-foreground">
             @{reply?.profile.username}:{" "}
+          </span>
+          <span className="text-[rgb(79,128,161)]">
+            {reply?.replyTo ? `@${reply.replyTo} ` : ""}
           </span>
           {reply?.content}
         </p>
       </div>
       <div>
         <div className="flex gap-0 w-full justify-end items-center">
+          {isOwner(profile, reply) && (
+            <>
+              {deleteButton}
+              {deleteDialog}
+            </>
+          )}
+
           <Button
             variant="ghost"
             className="text-[35px] py-7 text-[#385A71] hover:bg-foreground"
@@ -108,6 +137,7 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
       {showReplyForm && (
         <NovelCommentReplyCreateForm
           commentId={commentId}
+          replyId={reply.id}
           handleSuccess={handleSuccessReply}
           novelId={novelId}
           isReply={true}

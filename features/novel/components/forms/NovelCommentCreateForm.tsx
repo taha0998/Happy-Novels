@@ -5,7 +5,7 @@ import { Form } from "@/components/form/Form";
 import { SubmitButton } from "@/components/form/SubmitButton";
 import { EPMTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Textarea } from "@/components/ui/textarea";
-import { createNovelComment } from "../../actions/create-novel-comment";
+import { createNovelComment } from "../../actions/commentsActions/create-novel-comment";
 
 type NovelCreateFormProps = {
   novelId: string;

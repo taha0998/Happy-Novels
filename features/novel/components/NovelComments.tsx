@@ -50,7 +50,7 @@ const NovelComments = ({ paginatedComments, novelId }: NovelCommentsProps) => {
   return (
     <div className="flex flex-col gap-30 text-[35px] mt-45 self-center w-325.75 ">
       <NovelCreateForm novelId={novelId} handleSuccess={handleAddComment} />
-      <div ref={ref} className="flex flex-col gap-20 w-400 self-center mt ">
+      <div ref={ref} className="flex flex-col gap-20 w-375 self-center mt ">
         {comments.map((comment) => (
           <Comment key={comment.id} comment={comment} novelId={novelId} />
         ))}

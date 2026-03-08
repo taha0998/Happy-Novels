@@ -6,13 +6,14 @@ import { Form } from "@/components/form/Form";
 import { SubmitButton } from "@/components/form/SubmitButton";
 import { EPMTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Textarea } from "@/components/ui/textarea";
-import { createNovelReplyComment } from "../../actions/create-novel-reply-comment";
+import { createNovelReplyComment } from "../../actions/commentsActions/create-novel-reply-comment";
 
 type NovelCommentReplyCreateFormProps = {
   commentId: string;
   handleSuccess: () => void;
   novelId: string;
   isReply?: boolean;
+  replyId?: string;
 };
 
 const NovelCommentReplyCreateForm = ({
@@ -20,9 +21,10 @@ const NovelCommentReplyCreateForm = ({
   handleSuccess,
   novelId,
   isReply = false,
+  replyId,
 }: NovelCommentReplyCreateFormProps) => {
   const [actionState, action] = useActionState(
-    createNovelReplyComment.bind(null, commentId, novelId, isReply),
+    createNovelReplyComment.bind(null, commentId, novelId, isReply, replyId),
     EPMTY_ACTION_STATE,
   );
 
