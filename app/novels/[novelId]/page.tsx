@@ -6,7 +6,6 @@ import { NovelChaptersLoader } from "@/features/novel/components/NovelChaptersLo
 import { NovelComments } from "@/features/novel/components/NovelComments";
 import { NovelRecommendations } from "@/features/novel/components/novelRecommendation/NovelRecommendations";
 import { getNovel } from "@/features/novel/queries/get-novel";
-import { getNovelComments } from "@/features/novel/queries/get-novel-comments";
 import { searchParamsCache } from "@/features/novel/searchParams";
 
 type NovelPageProps = {
@@ -16,17 +15,11 @@ type NovelPageProps = {
   searchParams: Promise<SearchParams>;
 };
 
-export const ravalidate = 30;
+export const ravalidate = 3600;
 
 const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
   const { novelId } = await params;
-  const novelPromise = getNovel(novelId);
-  const paginatedCommentsPromise = getNovelComments(novelId);
-
-  const [novel, paginatedComments] = await Promise.all([
-    novelPromise,
-    paginatedCommentsPromise,
-  ]);
+  const novel = await getNovel(novelId);
 
   const recommendedNovels = novel?.recommendations.flatMap(
     (r) => r.recommendedNovelId,
@@ -39,7 +32,7 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
   const ParsedSearchParams = await searchParamsCache.parse(searchParams);
   const key = ParsedSearchParams.chaptersPage;
 
-  if (!novel || !paginatedComments) {
+  if (!novel) {
     return;
   }
   return (
@@ -67,12 +60,9 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
           target={false}
         />
       )}
-      {paginatedComments && (
-        <NovelComments
-          paginatedComments={paginatedComments}
-          novelId={novel.id}
-        />
-      )}
+      <Suspense fallback={"LLLLLL"}>
+        <NovelComments novelId={novel.id} />
+      </Suspense>
     </div>
   );
 };

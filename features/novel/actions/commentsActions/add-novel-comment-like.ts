@@ -1,19 +1,30 @@
 'use server'
 
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect"
+import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
 export const addNovelCommentLike = async (novelCommentId: string) => {
-    const { user } = await getAuthOrRedirect();
+    const profile = await getProfile()
 
-    if (!user) {
+    if (!profile) {
         return;
+    }
+    const isLiked = await prisma.linkNovelCommentLikes.findUnique({
+        where: {
+            profileId_NovelCommentId: {
+                profileId: profile.id,
+                NovelCommentId: novelCommentId
+            }
+        }
+    })
+    if (isLiked) {
+        return
     }
 
     try {
         await prisma.linkNovelCommentLikes.create({
             data: {
-                profileId: user.profile[0].id,
+                profileId: profile.id,
                 NovelCommentId: novelCommentId
             }
         })

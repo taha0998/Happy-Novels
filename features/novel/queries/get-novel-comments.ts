@@ -10,15 +10,17 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
     const take = 10;
     const where = {
         novelId,
-        id: {
-            lt: cursor,
-        }
+        ...(cursor && {
+            id: {
+                lt: cursor,
+            }
+        })
     }
 
 
 
-    // eslint-disable-next-line prefer-const
-    let [comments, count] = await prisma.$transaction([
+
+    let comments = await
         prisma.novelComment.findMany({
             where,
             orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
@@ -43,13 +45,12 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
                 _count: {
                     select: { LinkNovelCommentLikes: true }
                 },
-                LinkNovelCommentLikes: true,
+                LinkNovelCommentLikes: {
+                    where: { profileId: profile.id }
+                },
             }
-        }),
-        prisma.novelComment.count({
-            where,
-        })
-    ]);
+        });
+
     const hasNextPage = comments.length > take;
     comments = hasNextPage ? comments.slice(0, -1) : comments;
 
@@ -57,13 +58,13 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
         list: comments.map((comment) => ({
             ...comment,
             isOwner: isOwner(profile, comment) ?? false,
-            isLiked: comment.LinkNovelCommentLikes.some(likedByProfile => likedByProfile.profileId === profile.id),
+            isLiked: comment.LinkNovelCommentLikes.length > 0,
             totalLikes: comment._count.LinkNovelCommentLikes,
         })
 
         ),
         metadata: {
-            count,
+            // count,
             hasNextPage,
             cursor: comments.at(-1)?.id
         }

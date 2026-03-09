@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
 import { useConfirmDialog } from "@/components/useConfirmDialog";
-import { isOwner } from "@/features/auth/actions/is-owner";
-import { useProfile } from "@/features/auth/queries/useProfile";
 import { addNovelCommentLike } from "@/features/novel/actions/commentsActions/add-novel-comment-like";
 import { removeNovelComment } from "@/features/novel/actions/commentsActions/remove-novel-comment";
 import { removeNovelCommentLike } from "@/features/novel/actions/commentsActions/remove-novel-comment-like";
@@ -26,7 +24,6 @@ const Comment = ({ comment, novelId }: CommentProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [likes, setLikes] = useState(comment.totalLikes);
   const [isLiked, setIsLiked] = useState(comment.isLiked);
-  const [profile] = useProfile();
 
   const queryClient = useQueryClient();
 
@@ -51,19 +48,16 @@ const Comment = ({ comment, novelId }: CommentProps) => {
       setOpen((state) => !state);
     }
   };
-  const handelLike = () => {
-    if (isLiked) {
-      setLikes((state) => state - 1);
-    } else {
-      setLikes((state) => state + 1);
-    }
-    setIsLiked((state) => !state);
-  };
 
   const handleLikeAction = async () => {
-    await (comment.isLiked
-      ? removeNovelCommentLike(comment.id)
-      : addNovelCommentLike(comment.id));
+    const next = !isLiked;
+
+    setIsLiked(next);
+    setLikes((l) => (next ? l + 1 : l - 1));
+
+    await (next
+      ? addNovelCommentLike(comment.id)
+      : removeNovelCommentLike(comment.id));
   };
 
   useEffect(() => {
@@ -100,7 +94,7 @@ const Comment = ({ comment, novelId }: CommentProps) => {
         </div>
         <div>
           <div className="flex gap-0 w-full justify-end items-center">
-            {isOwner(profile, comment) && (
+            {comment.isOwner && (
               <>
                 {confirmDelete}
                 {deleteButton}
@@ -113,13 +107,11 @@ const Comment = ({ comment, novelId }: CommentProps) => {
             >
               reply
             </Button>
-            <form action={handleLikeAction}>
-              <CommentLikeButton
-                likes={likes}
-                isLiked={isLiked}
-                onClick={handelLike}
-              />
-            </form>
+            <CommentLikeButton
+              likes={likes}
+              isLiked={isLiked}
+              onClick={handleLikeAction}
+            />
           </div>
         </div>
         <Replys

@@ -1,6 +1,8 @@
+"use server"
+import { unstable_cache } from "next/cache"
 import { prisma } from "@/lib/prisma"
 
-export const getNovel = async (id: string) => {
+export const getNovel = async (id: string) => unstable_cache(async () => {
     return await prisma.novel.findUnique({
         where: {
             id,
@@ -15,4 +17,7 @@ export const getNovel = async (id: string) => {
             recommendedIn: true,
         },
     })
-}
+},
+    ["novel-details", id],
+    { revalidate: 3600, tags: [`novel-${id}`] }
+)();

@@ -15,9 +15,6 @@ const NovelChapterPagination = ({ count }: NovelChapterPaginationProps) => {
     "chaptersPage",
     chaptersPaginationParser,
   );
-  const handleClick = (page: number) => {
-    setChapterPage(page);
-  };
 
   return (
     <div className="flex flex-wrap justify-start mt-7 gap-x-5 gap-y-2.5">
@@ -33,7 +30,7 @@ const NovelChapterPagination = ({ count }: NovelChapterPaginationProps) => {
             size="none"
             className="p-2"
             variant={isActive ? "default" : "outline"}
-            onClick={() => handleClick(index)}
+            onClick={() => setChapterPage(index)}
           >
             <p className="text-[26px]">
               {start}-{end}

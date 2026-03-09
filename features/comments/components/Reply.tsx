@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
 import { useConfirmDialog } from "@/components/useConfirmDialog";
-import { isOwner } from "@/features/auth/actions/is-owner";
-import { useProfile } from "@/features/auth/queries/useProfile";
 import { addNovelCommentReplyLike } from "@/features/novel/actions/commentsActions/add-novel-comment-reply-like";
 import { removeNovelCommentReply } from "@/features/novel/actions/commentsActions/remove-novel-comment-reply";
 import { removeNovelCommentReplyLike } from "@/features/novel/actions/commentsActions/remove-novel-comment-reply-like";
@@ -28,7 +26,6 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [likes, setLikes] = useState(reply?.totalLikes);
   const [isLiked, setIsLiked] = useState(reply.isLiked);
-  const [profile] = useProfile();
 
   const queryClient = useQueryClient();
 
@@ -111,7 +108,7 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
       </div>
       <div>
         <div className="flex gap-0 w-full justify-end items-center">
-          {isOwner(profile, reply) && (
+          {reply.isOwner && (
             <>
               {deleteButton}
               {deleteDialog}
