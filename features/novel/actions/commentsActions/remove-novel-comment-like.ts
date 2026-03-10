@@ -1,20 +1,31 @@
 'use server';
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect"
+import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
-export const removeNovelCommentLike = async (commentId: string) => {
-    const { user } = await getAuthOrRedirect()
+export const removeNovelCommentLike = async (novelCommentId: string) => {
+    const profile = await getProfile()
 
-    if (!user) {
-        return;
-    }
+    if (!profile) { return { error: 'remove-without-profile' } }
 
     try {
+
+        const isLiked = await prisma.linkNovelCommentLikes.findUnique({
+            where: {
+                profileId_NovelCommentId: {
+                    profileId: profile.id,
+                    NovelCommentId: novelCommentId
+                }
+            }
+        })
+        if (!isLiked) {
+            return
+        }
+
         await prisma.linkNovelCommentLikes.delete({
             where: {
                 profileId_NovelCommentId: {
-                    profileId: user.profile[0].id,
-                    NovelCommentId: commentId,
+                    profileId: profile.id,
+                    NovelCommentId: novelCommentId,
                 }
             }
         })

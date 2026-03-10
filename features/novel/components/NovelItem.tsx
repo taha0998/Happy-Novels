@@ -20,7 +20,7 @@ const NovelItem = ({
 }: NovelItemProps) => {
   return (
     <div className="flex flex-col w-86.25">
-      <Link href={NovelPath(id)} prefetch={true}>
+      <Link href={NovelPath(id)} prefetch={false}>
         <Image
           src={coverImg}
           alt="Novel {Title}"

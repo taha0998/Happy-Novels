@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { toastStyle } from "@/utils/toastStyle";
 import { useActionFeedback } from "./hooks/useActionFeedback";
 import { ActionState } from "./utils/to-action-state";
 
@@ -31,7 +32,7 @@ const Form = ({
     },
     onError: ({ actionState }) => {
       if (actionState.message) {
-        toast.error(actionState.message, { position: "top-left" });
+        toast.error(actionState.message, toastStyle);
       }
       onError?.(actionState);
     },

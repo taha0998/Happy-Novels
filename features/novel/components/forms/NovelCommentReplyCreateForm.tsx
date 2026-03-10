@@ -14,6 +14,7 @@ type NovelCommentReplyCreateFormProps = {
   novelId: string;
   isReply?: boolean;
   replyId?: string;
+  reply?: boolean;
 };
 
 const NovelCommentReplyCreateForm = ({
@@ -32,10 +33,9 @@ const NovelCommentReplyCreateForm = ({
     <Form
       actionState={actionState}
       action={action}
-      className="flex flex-col ml-27.5"
+      className="flex flex-col ml-27.5 py-7"
       onSuccess={handleSuccess}
     >
-      <label className="text-[50px] font-medium mb-7.5">Comments:</label>
       <div className="max-w-325.75 relative">
         <Textarea
           placeholder="Type your comment here..."

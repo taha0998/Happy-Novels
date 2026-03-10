@@ -16,7 +16,7 @@ export const createNovelReplyComment = async (commentId: string, novelId: string
     const { user } = await getAuthOrRedirect();
 
     if (!user || !user.profile) {
-        return toActionState('ERROR', 'no auth')
+        return toActionState('ERROR', 'No Auth')
     }
     if (isReply && !replyId) {
         return toActionState('ERROR', 'Target Reply is missing.')

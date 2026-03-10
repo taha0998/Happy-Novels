@@ -19,7 +19,11 @@ const NovelChapters = async ({ novelId, searchParams }: NovelChaptersProps) => {
     <>
       <div className="flex flex-wrap gap-7.5 mt-15">
         {chapters.map((chapter) => (
-          <Link href={ChapterPath(chapter.id)} key={chapter.id}>
+          <Link
+            href={ChapterPath(chapter.id)}
+            key={chapter.id}
+            prefetch={false}
+          >
             <ChapterButton number={chapter.number} />
           </Link>
         ))}

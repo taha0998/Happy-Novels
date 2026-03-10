@@ -20,22 +20,26 @@ const NovelRecommendation = async ({
     recommendedNovelId,
   );
 
+  if (!recommendedNovel || !recommendedNovelInfo) {
+    return null;
+  }
+
   const targetNovel = {
     id: novelId,
     coverImg: targetNovelCover,
     title: targetNovelTitle,
   };
 
-  const userWhoRecommend = recommendedNovelInfo?.userWhoRecommendName;
-
-  if (!recommendedNovel || !userWhoRecommend) {
-    return null;
-  }
+  const userWhoRecommend = recommendedNovelInfo.userWhoRecommendName;
+  const content = recommendedNovelInfo.content;
 
   return (
     <div className="max-w-[85%] flex gap-15 justify-between items-center ">
       <NovelRecommendationCard targetNovel={targetNovel} />
-      <NovelRecommendationInfo userWhoRecommend={userWhoRecommend} />
+      <NovelRecommendationInfo
+        userWhoRecommend={userWhoRecommend}
+        content={content}
+      />
       <NovelRecommendationCard recommendedNovel={recommendedNovel} />
     </div>
   );

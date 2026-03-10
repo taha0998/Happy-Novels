@@ -60,7 +60,7 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
           target={false}
         />
       )}
-      <Suspense fallback={"LLLLLL"}>
+      <Suspense fallback={"Loading"}>
         <NovelComments novelId={novel.id} />
       </Suspense>
     </div>

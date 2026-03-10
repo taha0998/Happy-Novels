@@ -62,11 +62,12 @@ const Replys = ({
   return (
     <>
       {showReplyForm && (
-        <div className="mb-10">
+        <div className="mb-10 ">
           <NovelCommentReplyCreateForm
             commentId={commentId}
             handleSuccess={handleSuccess}
             novelId={novelId}
+            reply={true}
           />
         </div>
       )}
@@ -88,7 +89,7 @@ const Replys = ({
             </Fragment>
           ))}
           {isFetchingNextPage && <CommentSkeleton />}
-          {hasNextPage && (
+          {hasNextPage && !isFetchingNextPage && (
             <img
               src="https://yuzykc5xj5.ufs.sh/f/9ZvEbi04z0PNvGv2gQl3IxdhR2k0q7WrupQnHbNFwtA8KOJ6"
               alt="dots icon"

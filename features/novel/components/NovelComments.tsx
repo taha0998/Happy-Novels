@@ -50,7 +50,7 @@ const NovelComments = ({ novelId }: NovelCommentsProps) => {
             <CommentSkeleton />
           </>
         ) : (
-          <div className="flex flex-col gap-20 w-375 self-center mt ">
+          <div className="flex flex-col gap-15 w-326 self-center mt ">
             {comments?.map((comment) => (
               <Comment key={comment.id} comment={comment} novelId={novelId} />
             ))}

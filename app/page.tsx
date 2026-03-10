@@ -1,7 +1,9 @@
 import { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 import { Title } from "@/components/Title";
 import { NovelFilter } from "@/features/novel/components/NovelFilter";
 import { NovelList } from "@/features/novel/components/NovelList";
+import { NovelsSkeleton } from "@/features/novel/components/NovelsSkeleton";
 import { searchParamsCache } from "@/features/novel/searchParams";
 
 type HomePageProps = {
@@ -15,7 +17,9 @@ const HomePage = ({ searchParams }: HomePageProps) => {
     <div className="flex flex-col w-[91%] self-center">
       <Title />
       <NovelFilter />
-      <NovelList searchParams={searchParamsCache.parse(searchParams)} />
+      <Suspense fallback={<NovelsSkeleton />}>
+        <NovelList searchParams={searchParamsCache.parse(searchParams)} />
+      </Suspense>
     </div>
   );
 };

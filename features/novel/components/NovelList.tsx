@@ -14,7 +14,7 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
 
   return (
     <>
-      <div className="w-full flex  flex-wrap gap-x-29.25 gap-y-15 mt-15 animate-fade-in-top">
+      <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 mt-15 animate-fade-in-top">
         {novels.map((novel) => (
           <NovelItem
             key={novel.id}

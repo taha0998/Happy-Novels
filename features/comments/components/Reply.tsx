@@ -3,12 +3,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
 import { useConfirmDialog } from "@/components/useConfirmDialog";
 import { addNovelCommentReplyLike } from "@/features/novel/actions/commentsActions/add-novel-comment-reply-like";
 import { removeNovelCommentReply } from "@/features/novel/actions/commentsActions/remove-novel-comment-reply";
 import { removeNovelCommentReplyLike } from "@/features/novel/actions/commentsActions/remove-novel-comment-reply-like";
 import { NovelCommentReplyCreateForm } from "@/features/novel/components/forms/NovelCommentReplyCreateForm";
+import { toastStyle } from "@/utils/toastStyle";
 import { Button } from "../../../components/ui/button";
 import { NovelCommentReplyWithMetadata } from "../types";
 
@@ -33,7 +35,7 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
     trigger: (
       <Button
         variant={"ghost"}
-        className="text-[35px] py-7 text-[#FE5311] hover:bg-[#FE5311]"
+        className="text-[30px] py-7 px-2 text-[#FE5311] hover:bg-[#FE5311]"
       >
         delete
       </Button>
@@ -54,19 +56,25 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
     handleSuccess();
   };
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikes((state) => state - 1);
-    } else {
-      setLikes((state) => state + 1);
-    }
-    setIsLiked((state) => !state);
-  };
-
   const handleLikeAction = async () => {
-    await (reply.isLiked
-      ? removeNovelCommentReplyLike(reply.id)
-      : addNovelCommentReplyLike(reply.id));
+    const next = !isLiked;
+
+    setIsLiked(next);
+    setLikes((l) => (next ? l + 1 : l - 1));
+
+    const result = await (next
+      ? addNovelCommentReplyLike(reply.id)
+      : removeNovelCommentReplyLike(reply.id));
+
+    if (result?.error === "add-without-profile") {
+      toast.error("No Auth", toastStyle);
+      setLikes((l) => l - 1);
+      setIsLiked(false);
+    } else if (result?.error === "remove-without-profile") {
+      toast.error("No Auth", toastStyle);
+      setLikes((l) => l + 1);
+      setIsLiked(true);
+    }
   };
 
   useEffect(() => {
@@ -89,7 +97,7 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
           className="rounded-full h-20 w-20"
         />
         <p
-          className={clsx("font-medium", {
+          className={clsx("font-medium text-[33px]", {
             "line-clamp-2": !isOpen,
             "cursor-pointer": !isOpen && isTruncated,
             "cursor-default": !isTruncated,
@@ -97,7 +105,12 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
           ref={replyRef}
           onClick={handleOpen}
         >
-          <span className="text-secondary-foreground">
+          <span
+            className={clsx("", {
+              "text-[#FE5311]": reply.isOwner,
+              "text-primary": !reply.isOwner,
+            })}
+          >
             @{reply?.profile.username}:{" "}
           </span>
           <span className="text-[rgb(79,128,161)]">
@@ -117,18 +130,16 @@ const Reply = ({ reply, commentId, novelId, handleSuccess }: ReplyProps) => {
 
           <Button
             variant="ghost"
-            className="text-[35px] py-7 text-[#385A71] hover:bg-foreground"
+            className="text-[30px] py-7 px-2 text-[#385A71] hover:bg-foreground"
             onClick={() => setShowReplyForm((state) => !state)}
           >
             reply
           </Button>
-          <form action={handleLikeAction}>
-            <CommentLikeButton
-              likes={likes}
-              isLiked={isLiked}
-              onClick={handleLike}
-            />
-          </form>
+          <CommentLikeButton
+            likes={likes}
+            isLiked={isLiked}
+            onClick={handleLikeAction}
+          />
         </div>
       </div>
       {showReplyForm && (

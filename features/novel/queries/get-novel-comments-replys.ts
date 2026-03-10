@@ -48,7 +48,7 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
         list: replys.map(reply => ({
             ...reply,
             isOwner: isOwner(profile, reply) ?? false,
-            isLiked: reply.LinkNovelCommentReplyLikes.some(likedByProfile => likedByProfile.profileId === profile.id),
+            isLiked: reply.LinkNovelCommentReplyLikes.some(likedByProfile => likedByProfile.profileId === profile?.id),
             totalLikes: reply._count.LinkNovelCommentReplyLikes
         })),
         metadata: {

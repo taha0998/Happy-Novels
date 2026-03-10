@@ -28,11 +28,15 @@ const NovelRecommendedIn = async ({
     coverImg: recommendedNovelCover,
   };
 
+  const userWhoRecommend = targetNovelInfo.userWhoRecommendName;
+  const content = targetNovelInfo.content;
+
   return (
     <div className="max-w-[85%] flex gap-15 justify-between items-center ">
       <NovelRecommendationCard recommendedNovel={targetNovel} />
       <NovelRecommendationInfo
-        userWhoRecommend={targetNovelInfo?.userWhoRecommendName}
+        userWhoRecommend={userWhoRecommend}
+        content={content}
       />
       <NovelRecommendationCard targetNovel={recommendedNovel} />
     </div>

@@ -1,10 +1,9 @@
 'use server';
 
-import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import { ParsedSearchParams } from "../searchParams";
 
-export const getNovels = cache(async (searchParams: ParsedSearchParams) => {
+export const getNovels = (async (searchParams: ParsedSearchParams) => {
     const SearchParams = await searchParams;
 
     const take = 20;

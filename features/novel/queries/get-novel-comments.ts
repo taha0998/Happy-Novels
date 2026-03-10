@@ -18,8 +18,6 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
     }
 
 
-
-
     let comments = await
         prisma.novelComment.findMany({
             where,
@@ -46,7 +44,7 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
                     select: { LinkNovelCommentLikes: true }
                 },
                 LinkNovelCommentLikes: {
-                    where: { profileId: profile.id }
+                    where: { profileId: profile?.id }
                 },
             }
         });
@@ -58,13 +56,12 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
         list: comments.map((comment) => ({
             ...comment,
             isOwner: isOwner(profile, comment) ?? false,
-            isLiked: comment.LinkNovelCommentLikes.length > 0,
+            isLiked: profile ? comment.LinkNovelCommentLikes.length > 0 : false,
             totalLikes: comment._count.LinkNovelCommentLikes,
         })
 
         ),
         metadata: {
-            // count,
             hasNextPage,
             cursor: comments.at(-1)?.id
         }

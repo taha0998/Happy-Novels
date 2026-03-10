@@ -101,6 +101,7 @@ model NovelRecommendation {
   recommendedNovelId   String
   recommendedNovel     Novel  @relation("RecommendedNovel", fields: [recommendedNovelId], references: [id], onDelete: Cascade)
   userWhoRecommendName String
+  content              String
 
   targetNovelId String
   targetNovel   Novel  @relation("TargetNovel", fields: [targetNovelId], references: [id], onDelete: Cascade)
@@ -138,6 +139,7 @@ model Chapter {
   novel     Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
   comment   ChapterComment[]
 
+  @@unique([novelId, number])
   @@index([novelId])
 }
 
