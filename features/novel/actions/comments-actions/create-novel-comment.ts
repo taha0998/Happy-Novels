@@ -14,7 +14,7 @@ export const createNovelComment = async (novelId: string, _actionState: ActionSt
     const { user } = await getAuthOrRedirect()
 
     if (!user?.profile[0] || !user) {
-        return toActionState('ERROR', 'not Auth')
+        return toActionState('ERROR', 'Not Auth')
     }
     try {
         const data = createNovelCommentShema.parse(Object.fromEntries(formData))

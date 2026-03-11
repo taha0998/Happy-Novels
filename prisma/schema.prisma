@@ -26,18 +26,21 @@ model Session {
 }
 
 model Profile {
-  id                         String                       @id @default(cuid())
-  username                   String                       @unique
-  userId                     String                       @unique
-  user                       User                         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  LinkFavoriteNovels         LinkFavoriteNovel[]
-  LinkWatchLaterNovels       LinkWatchLaterNovel[]
-  LinkNotificationNovels     LinkNotificationNovel[]
-  chapterComments            ChapterComment[]
-  novelComments              NovelComment[]
-  novelCommentReplies        NovelCommentReply[]
-  LinkNovelCommentLikes      LinkNovelCommentLikes[]
-  LinkNovelCommentReplyLikes LinkNovelCommentReplyLikes[]
+  id                          String                        @id @default(cuid())
+  username                    String                        @unique
+  userId                      String                        @unique
+  user                        User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  linkFavoriteNovels          LinkFavoriteNovel[]
+  linkWatchLaterNovels        LinkWatchLaterNovel[]
+  linkNotificationNovels      LinkNotificationNovel[]
+  chapterComments             ChapterComment[]
+  novelComments               NovelComment[]
+  novelCommentReplies         NovelCommentReply[]
+  linkNovelCommentLikes       LinkNovelCommentLike[]
+  linkNovelCommentReplyLikes  LinkNovelCommentReplyLikes[]
+  chapterCommentReply         ChapterCommentReply[]
+  linkChapterCommentReplyLike LinkChapterCommentReplyLike[]
+  LinkChapterCommentLike      LinkChapterCommentLike[]
 
   @@index([userId])
 }
@@ -53,13 +56,28 @@ model Novel {
   rating                 Int
   ratingCount            Int
   chapters               Chapter[]
-  LinkTypeNovels         LinkTypeNovel[]
-  LinkFavoriteNovels     LinkFavoriteNovel[]
+  linkTypeNovels         LinkTypeNovel[]
+  linkFavoriteNovels     LinkFavoriteNovel[]
   comments               NovelComment[]
   recommendations        NovelRecommendation[]   @relation("TargetNovel")
   recommendedIn          NovelRecommendation[]   @relation("RecommendedNovel")
-  LinkWatchLaterNovels   LinkWatchLaterNovel[]
-  LinkNotificationNovels LinkNotificationNovel[]
+  linkWatchLaterNovels   LinkWatchLaterNovel[]
+  linkNotificationNovels LinkNotificationNovel[]
+}
+
+model Chapter {
+  id        String           @id @default(cuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  title     String
+  number    Int
+  content   String
+  novelId   String
+  novel     Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  comment   ChapterComment[]
+
+  @@unique([novelId, number])
+  @@index([novelId])
 }
 
 model LinkFavoriteNovel {
@@ -125,64 +143,101 @@ model LinkTypeNovel {
 model Type {
   id             String          @id @default(cuid())
   name           String
-  LinkTypeNovels LinkTypeNovel[]
+  linkTypeNovels LinkTypeNovel[]
 }
 
-model Chapter {
-  id        String           @id @default(cuid())
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  title     String
-  number    Int
-  content   String
-  novelId   String
-  novel     Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  comment   ChapterComment[]
-
-  @@unique([novelId, number])
-  @@index([novelId])
-}
+//////////Chapter Comments
 
 model ChapterComment {
-  id        String   @id @default(cuid())
-  content   String
-  profileId String?
-  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
-  chapterId String
-  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  id                     String                   @id @default(cuid())
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  content                String
+  profileId              String
+  profile                Profile                  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  chapterId              String
+  chapter                Chapter                  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterCommentReply    ChapterCommentReply[]
+  LinkChapterCommentLike LinkChapterCommentLike[]
 
   @@index([profileId])
   @@index([chapterId])
 }
 
+model LinkChapterCommentLike {
+  id               String         @id @default(cuid())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  profileId        String
+  profile          Profile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  chapterCommentId String
+  chapterComment   ChapterComment @relation(fields: [chapterCommentId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, chapterCommentId])
+  @@index([profileId])
+  @@index([chapterCommentId])
+}
+
+model ChapterCommentReply {
+  id                          String                        @id @default(cuid())
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime                      @updatedAt
+  content                     String
+  profileId                   String
+  profile                     Profile                       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  chapterCommentId            String
+  chapterComment              ChapterComment                @relation(fields: [chapterCommentId], references: [id], onDelete: Cascade)
+  replyTo                     String?
+  linkChapterCommentReplyLike LinkChapterCommentReplyLike[]
+
+  @@index([profileId])
+  @@index([chapterCommentId])
+}
+
+model LinkChapterCommentReplyLike {
+  id                    String              @id @default(cuid())
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  profileId             String
+  profile               Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  chapterCommentReplyId String
+  chapterCommentReply   ChapterCommentReply @relation(fields: [chapterCommentReplyId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, chapterCommentReplyId])
+  @@index([profileId])
+  @@index([chapterCommentReplyId])
+}
+
+//////////Novel Comments
+
 model NovelComment {
-  id                    String                  @id @default(cuid())
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt
+  id                    String                 @id @default(cuid())
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
   content               String
   profileId             String
-  profile               Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile               Profile                @relation(fields: [profileId], references: [id], onDelete: Cascade)
   novelId               String
-  novel                 Novel                   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  novel                 Novel                  @relation(fields: [novelId], references: [id], onDelete: Cascade)
   novelCommentReplys    NovelCommentReply[]
-  LinkNovelCommentLikes LinkNovelCommentLikes[]
+  linkNovelCommentLikes LinkNovelCommentLike[]
 
   @@index([profileId])
   @@index([novelId])
 }
 
-model LinkNovelCommentLikes {
+model LinkNovelCommentLike {
   id             String       @id @default(cuid())
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   profileId      String
   profile        Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  NovelCommentId String
-  NovelComment   NovelComment @relation(fields: [NovelCommentId], references: [id], onDelete: Cascade)
+  novelCommentId String
+  novelComment   NovelComment @relation(fields: [novelCommentId], references: [id], onDelete: Cascade)
 
-  @@unique([profileId, NovelCommentId])
+  @@unique([profileId, novelCommentId])
   @@index([profileId])
-  @@index([NovelCommentId])
+  @@index([novelCommentId])
 }
 
 model NovelCommentReply {
@@ -195,7 +250,7 @@ model NovelCommentReply {
   novelcommentId             String
   novelComment               NovelComment                 @relation(fields: [novelcommentId], references: [id], onDelete: Cascade)
   replyTo                    String?
-  LinkNovelCommentReplyLikes LinkNovelCommentReplyLikes[]
+  linkNovelCommentReplyLikes LinkNovelCommentReplyLikes[]
 
   @@index([profileId])
   @@index([novelcommentId])
@@ -207,10 +262,10 @@ model LinkNovelCommentReplyLikes {
   updatedAt           DateTime          @updatedAt
   profileId           String
   profile             Profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  NovelCommentReplyId String
-  NovelCOmmentReply   NovelCommentReply @relation(fields: [NovelCommentReplyId], references: [id], onDelete: Cascade)
+  novelCommentReplyId String
+  novelCOmmentReply   NovelCommentReply @relation(fields: [novelCommentReplyId], references: [id], onDelete: Cascade)
 
-  @@unique([profileId, NovelCommentReplyId])
+  @@unique([profileId, novelCommentReplyId])
   @@index([profileId])
-  @@index([NovelCommentReplyId])
+  @@index([novelCommentReplyId])
 }

@@ -34,16 +34,15 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
                     include: {
                         profile: {
                             select: {
-                                username: true,
                                 userId: true
                             }
                         }
                     }
                 },
                 _count: {
-                    select: { LinkNovelCommentLikes: true }
+                    select: { linkNovelCommentLikes: true }
                 },
-                LinkNovelCommentLikes: {
+                linkNovelCommentLikes: {
                     where: { profileId: profile?.id }
                 },
             }
@@ -56,8 +55,8 @@ export const getNovelComments = async (novelId: string, cursor?: string) => {
         list: comments.map((comment) => ({
             ...comment,
             isOwner: isOwner(profile, comment) ?? false,
-            isLiked: profile ? comment.LinkNovelCommentLikes.length > 0 : false,
-            totalLikes: comment._count.LinkNovelCommentLikes,
+            isLiked: profile ? comment.linkNovelCommentLikes.length > 0 : false,
+            totalLikes: comment._count.linkNovelCommentLikes,
         })
 
         ),

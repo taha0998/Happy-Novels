@@ -1,75 +1,40 @@
 "use client";
-import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
-import { useConfirmDialog } from "@/components/useConfirmDialog";
-import { addNovelCommentLike } from "@/features/novel/actions/commentsActions/add-novel-comment-like";
-import { removeNovelComment } from "@/features/novel/actions/commentsActions/remove-novel-comment";
-import { removeNovelCommentLike } from "@/features/novel/actions/commentsActions/remove-novel-comment-like";
-import { toastStyle } from "@/utils/toastStyle";
-import { Button } from "../../../components/ui/button";
-import { NovelCommentWithMetadata } from "../types";
-import { Replys } from "./Replys";
+import { Button } from "@/components/ui/button";
 
 type CommentProps = {
-  comment: NovelCommentWithMetadata;
-  novelId: string;
+  isOwner: boolean;
+  username: string;
+  content: string;
+  confirmDelete: React.ReactElement;
+  deleteButton: React.ReactElement;
+  likes: number;
+  isLiked: boolean;
+  handleLikeAction: () => Promise<void>;
+  setShowReplyForm: Dispatch<SetStateAction<boolean>>;
 };
 
-const Comment = ({ comment, novelId }: CommentProps) => {
+const Comment = ({
+  isOwner,
+  username,
+  content,
+  confirmDelete,
+  deleteButton,
+  likes,
+  isLiked,
+  handleLikeAction,
+  setShowReplyForm,
+}: CommentProps) => {
   const [isOpen, setOpen] = useState(false);
   const [isTruncated, setTruncated] = useState(false);
   const commentRef = useRef<HTMLParagraphElement>(null);
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  console.log(comment.isLiked);
-  const [likes, setLikes] = useState(comment.totalLikes);
-  const [isLiked, setIsLiked] = useState(comment.isLiked);
-
-  const queryClient = useQueryClient();
-
-  const [deleteButton, confirmDelete] = useConfirmDialog({
-    trigger: (
-      <Button
-        variant={"ghost"}
-        className="text-[30px] py-7 px-2 text-[#FE5311] hover:bg-[#FE5311]"
-      >
-        delete
-      </Button>
-    ),
-    action: removeNovelComment.bind(null, comment.id),
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["comments", novelId],
-      }),
-  });
 
   const handleOpen = () => {
     if (isTruncated) {
       setOpen((state) => !state);
-    }
-  };
-
-  const handleLikeAction = async () => {
-    const next = !isLiked;
-
-    setIsLiked(next);
-    setLikes((l) => (next ? l + 1 : l - 1));
-
-    const result = await (next
-      ? addNovelCommentLike(comment.id)
-      : removeNovelCommentLike(comment.id));
-
-    if (result?.error === "add-without-profile") {
-      toast.error("No Auth", toastStyle);
-      setLikes((l) => l - 1);
-      setIsLiked(false);
-    } else if (result?.error === "remove-without-profile") {
-      toast.error("No Auth", toastStyle);
-      setLikes((l) => l + 1);
-      setIsLiked(false);
     }
   };
 
@@ -79,6 +44,7 @@ const Comment = ({ comment, novelId }: CommentProps) => {
       setTruncated(element.scrollHeight > element.clientHeight);
     }
   }, [commentRef]);
+
   return (
     <>
       <div className="flex flex-col gap-0 mb-7">
@@ -95,26 +61,26 @@ const Comment = ({ comment, novelId }: CommentProps) => {
           <p
             ref={commentRef}
             className={clsx("font-medium", {
-              "line-clamp-3": !isOpen,
-              "cursor-pointer": !isOpen && isTruncated,
+              "line-clamp-3 ": !isOpen,
+              "cursor-pointer ": !isOpen && isTruncated,
               "cursor-default": !isTruncated,
             })}
             onClick={handleOpen}
           >
             <span
               className={clsx("", {
-                "text-[#FE5311]": comment.isOwner,
-                "text-primary": !comment.isOwner,
+                "text-[#FE5311]": isOwner,
+                "text-primary": !isOwner,
               })}
             >
-              @{comment.profile.username}:{" "}
+              @{username}:{" "}
             </span>
-            {comment.content}
+            {content}
           </p>
         </div>
         <div>
           <div className="flex gap-0 w-full justify-end items-center">
-            {comment.isOwner && (
+            {isOwner && (
               <>
                 {confirmDelete}
                 {deleteButton}
@@ -134,13 +100,6 @@ const Comment = ({ comment, novelId }: CommentProps) => {
             />
           </div>
         </div>
-        <Replys
-          commentId={comment.id}
-          showReplyForm={showReplyForm}
-          setShowReplyForm={setShowReplyForm}
-          novelId={novelId}
-          replyCount={comment.novelCommentReplys.length}
-        />
       </div>
     </>
   );

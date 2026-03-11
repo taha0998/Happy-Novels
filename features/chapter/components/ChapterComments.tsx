@@ -1,26 +1,27 @@
 "use client";
+
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
-import { NovelComment } from "@/features/novel/components/NovelComment";
-import { addNovelCommentLike } from "../actions/comments-actions/add-novel-comment-like";
-import { createNovelComment } from "../actions/comments-actions/create-novel-comment";
-import { removeNovelComment } from "../actions/comments-actions/remove-novel-comment";
-import { removeNovelCommentLike } from "../actions/comments-actions/remove-novel-comment-like";
-import { getNovelComments } from "../queries/get-novel-comments";
-import { CreateForm } from "./forms/CommentCreateForm";
+import { CreateForm } from "@/features/novel/components/forms/CommentCreateForm";
+import { addChapterCommentLike } from "../actions/comment-actions/add-chapter-comment-like";
+import { createChapterComment } from "../actions/comment-actions/create-chapter-comment";
+import { removeChapterComment } from "../actions/comment-actions/remove-chapter-comment";
+import { removeChapterCommentLike } from "../actions/comment-actions/remove-chapter-comment-like";
+import { getChapterComments } from "../queries/get-chapter-comments";
+import { ChapterComment } from "./ChapterComment";
 
-export type NovelCommentsProps = {
-  novelId: string;
+type ChapterCommentsProps = {
+  chapterId: string;
 };
 
-const NovelComments = ({ novelId }: NovelCommentsProps) => {
-  const queryKey = ["comments", novelId];
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+const ChapterComments = ({ chapterId }: ChapterCommentsProps) => {
+  const queryKey = ["comments", chapterId];
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey,
-      queryFn: ({ pageParam }) => getNovelComments(novelId, pageParam),
+      queryFn: ({ pageParam }) => getChapterComments(chapterId, pageParam),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) =>
         lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
@@ -48,7 +49,7 @@ const NovelComments = ({ novelId }: NovelCommentsProps) => {
     <>
       <div className="flex flex-col gap-30 text-[35px] mt-45 self-center w-325.75 ">
         <CreateForm
-          action={createNovelComment.bind(null, novelId)}
+          action={createChapterComment.bind(null, chapterId)}
           handleSuccess={handelAddComment}
         />
         {isLoading ? (
@@ -59,13 +60,13 @@ const NovelComments = ({ novelId }: NovelCommentsProps) => {
         ) : (
           <div className="flex flex-col gap-15 w-326 self-center mt ">
             {comments?.map((comment) => (
-              <NovelComment
+              <ChapterComment
                 key={comment.id}
                 comment={comment}
-                novelId={novelId}
-                removeCommentAction={removeNovelComment}
-                addCommentLike={addNovelCommentLike}
-                removeCommentLike={removeNovelCommentLike}
+                chapterId={chapterId}
+                removeCommentAction={removeChapterComment}
+                addCommentLike={addChapterCommentLike}
+                removeCommentLike={removeChapterCommentLike}
               />
             ))}
             {isFetchingNextPage && (
@@ -82,4 +83,5 @@ const NovelComments = ({ novelId }: NovelCommentsProps) => {
     </>
   );
 };
-export { NovelComments };
+
+export { ChapterComments };

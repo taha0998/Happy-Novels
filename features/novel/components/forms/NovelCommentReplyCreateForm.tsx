@@ -6,7 +6,7 @@ import { Form } from "@/components/form/Form";
 import { SubmitButton } from "@/components/form/SubmitButton";
 import { EPMTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Textarea } from "@/components/ui/textarea";
-import { createNovelReplyComment } from "../../actions/commentsActions/create-novel-reply-comment";
+import { createNovelReplyComment } from "../../actions/comments-actions/create-novel-reply-comment";
 
 type NovelCommentReplyCreateFormProps = {
   commentId: string;

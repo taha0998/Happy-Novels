@@ -7,7 +7,7 @@ import { NovelCardTypeButtons } from "./NovelCardTypeButtons";
 type NovelCardProps = {
   novel: Prisma.NovelGetPayload<{
     include: {
-      LinkTypeNovels: {
+      linkTypeNovels: {
         include: {
           type: true;
         };
@@ -17,7 +17,7 @@ type NovelCardProps = {
 };
 
 const NovelCard = ({ novel }: NovelCardProps) => {
-  const types = novel.LinkTypeNovels.map((link) => link.type);
+  const types = novel.linkTypeNovels.map((link) => link.type);
 
   return (
     <div className="flex  gap-7.5 justify-around  mt-10">

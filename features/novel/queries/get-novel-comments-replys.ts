@@ -28,9 +28,9 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
                         userId: true
                     }
                 },
-                LinkNovelCommentReplyLikes: true,
+                linkNovelCommentReplyLikes: true,
                 _count: {
-                    select: { LinkNovelCommentReplyLikes: true }
+                    select: { linkNovelCommentReplyLikes: true }
                 }
 
             }
@@ -48,8 +48,8 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
         list: replys.map(reply => ({
             ...reply,
             isOwner: isOwner(profile, reply) ?? false,
-            isLiked: reply.LinkNovelCommentReplyLikes.some(likedByProfile => likedByProfile.profileId === profile?.id),
-            totalLikes: reply._count.LinkNovelCommentReplyLikes
+            isLiked: reply.linkNovelCommentReplyLikes.some(likedByProfile => likedByProfile.profileId === profile?.id),
+            totalLikes: reply._count.linkNovelCommentReplyLikes
         })),
         metadata: {
             count,

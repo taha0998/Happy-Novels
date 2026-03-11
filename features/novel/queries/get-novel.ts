@@ -8,7 +8,7 @@ export const getNovel = async (id: string) => unstable_cache(async () => {
             id,
         },
         include: {
-            LinkTypeNovels: {
+            linkTypeNovels: {
                 include: {
                     type: true,
                 }

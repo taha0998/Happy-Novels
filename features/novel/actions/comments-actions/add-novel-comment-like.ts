@@ -11,21 +11,21 @@ export const addNovelCommentLike = async (novelCommentId: string) => {
         if (!profile) {
             return { error: 'add-without-profile' };
         }
-        const isLiked = await prisma.linkNovelCommentLikes.findUnique({
+        const isLiked = await prisma.linkNovelCommentLike.findUnique({
             where: {
-                profileId_NovelCommentId: {
+                profileId_novelCommentId: {
                     profileId: profile.id,
-                    NovelCommentId: novelCommentId
+                    novelCommentId: novelCommentId
                 }
             }
         })
         if (isLiked) {
             return
         }
-        await prisma.linkNovelCommentLikes.create({
+        await prisma.linkNovelCommentLike.create({
             data: {
                 profileId: profile.id,
-                NovelCommentId: novelCommentId
+                novelCommentId,
             }
         })
     } catch (error) {

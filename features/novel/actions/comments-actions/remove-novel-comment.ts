@@ -5,12 +5,12 @@ import { isOwner } from "@/features/auth/actions/is-owner";
 import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
-export const removeNovelComment = async (commentId: string) => {
+export const removeNovelComment = async (novelCommentId: string) => {
     const profile = await getProfile()
 
     try {
         const comment = await prisma.novelComment.findUnique({
-            where: { id: commentId }
+            where: { id: novelCommentId }
         })
 
         if (!profile || !isOwner(profile, comment)) {
@@ -18,7 +18,7 @@ export const removeNovelComment = async (commentId: string) => {
         }
 
         await prisma.novelComment.delete({
-            where: { id: commentId }
+            where: { id: novelCommentId }
         })
 
     } catch (error) {

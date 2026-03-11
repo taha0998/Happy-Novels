@@ -3,7 +3,7 @@
 import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
-export const addNovelCommentReplyLike = async (NovelCommentReplyId: string) => {
+export const addNovelCommentReplyLike = async (novelCommentReplyId: string) => {
     const profile = await getProfile()
 
     try {
@@ -12,9 +12,9 @@ export const addNovelCommentReplyLike = async (NovelCommentReplyId: string) => {
         }
         const isLiked = await prisma.linkNovelCommentReplyLikes.findUnique({
             where: {
-                profileId_NovelCommentReplyId: {
+                profileId_novelCommentReplyId: {
                     profileId: profile.id,
-                    NovelCommentReplyId,
+                    novelCommentReplyId,
                 }
             }
         });
@@ -22,7 +22,7 @@ export const addNovelCommentReplyLike = async (NovelCommentReplyId: string) => {
 
         await prisma.linkNovelCommentReplyLikes.create({
             data: {
-                NovelCommentReplyId,
+                novelCommentReplyId,
                 profileId: profile.id,
             }
         })

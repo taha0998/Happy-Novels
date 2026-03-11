@@ -2,16 +2,16 @@
 import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
-export const removeNovelCommentReplyLike = async (NovelCommentReplyId: string) => {
+export const removeNovelCommentReplyLike = async (novelCommentReplyId: string) => {
     const profile = await getProfile()
 
     if (!profile) { return { error: 'add-without-profile' } }
     try {
         const isLiked = await prisma.linkNovelCommentReplyLikes.findUnique({
             where: {
-                profileId_NovelCommentReplyId: {
+                profileId_novelCommentReplyId: {
                     profileId: profile.id,
-                    NovelCommentReplyId,
+                    novelCommentReplyId,
                 }
             }
         })
@@ -22,9 +22,9 @@ export const removeNovelCommentReplyLike = async (NovelCommentReplyId: string) =
 
         await prisma.linkNovelCommentReplyLikes.delete({
             where: {
-                profileId_NovelCommentReplyId: {
+                profileId_novelCommentReplyId: {
                     profileId: profile.id,
-                    NovelCommentReplyId,
+                    novelCommentReplyId,
                 }
             }
         })

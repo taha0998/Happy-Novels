@@ -3,24 +3,23 @@ import { useActionState } from "react";
 import { FieldError } from "@/components/form/FieldError";
 import { Form } from "@/components/form/Form";
 import { SubmitButton } from "@/components/form/SubmitButton";
-import { EPMTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
+import {
+  ActionState,
+  EPMTY_ACTION_STATE,
+} from "@/components/form/utils/to-action-state";
 import { Textarea } from "@/components/ui/textarea";
-import { createNovelComment } from "../../actions/commentsActions/create-novel-comment";
 
 type NovelCreateFormProps = {
-  novelId: string;
+  action: (action: ActionState, formData: FormData) => Promise<ActionState>;
   handleSuccess: () => void;
 };
 
-const NovelCreateForm = ({ novelId, handleSuccess }: NovelCreateFormProps) => {
-  const [actionState, action] = useActionState(
-    createNovelComment.bind(null, novelId),
-    EPMTY_ACTION_STATE,
-  );
+const CreateForm = ({ action, handleSuccess }: NovelCreateFormProps) => {
+  const [actionState, FormAction] = useActionState(action, EPMTY_ACTION_STATE);
   return (
     <Form
       actionState={actionState}
-      action={action}
+      action={FormAction}
       onSuccess={handleSuccess}
       className="flex flex-col"
     >
@@ -41,4 +40,4 @@ const NovelCreateForm = ({ novelId, handleSuccess }: NovelCreateFormProps) => {
   );
 };
 
-export { NovelCreateForm };
+export { CreateForm };
