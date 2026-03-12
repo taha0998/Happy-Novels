@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import z from "zod";
 import { ActionState, fromErrorToActionState, toActionState } from "@/components/form/utils/to-action-state";
 import { NovelPath } from "@/lib/paths";
@@ -18,13 +18,29 @@ export const createChapterTest = async (_actionState: ActionState, formData: For
         const data = createChapterTestShema.parse(
             Object.fromEntries(formData)
         )
+        const existChapter = await prisma.chapter.findUnique({
+            where: {
+                novelId_number: {
+                    novelId: 'cmmjarau00000vhtkorpkcz6h',
+                    number: data.number
+                }
+            }
+        })
+        if (existChapter) return toActionState('ERROR', 'Chapter already exist')
 
-        await prisma.chapter.create({
+        const newChapter = await prisma.chapter.create({
             data: {
                 novelId: 'cmmjarau00000vhtkorpkcz6h',
                 ...data
             }
         })
+
+
+        revalidateTag(`chapter-${newChapter.id}`, 'default')
+
+        revalidateTag(`prev-next-chapter-cmmjarau00000vhtkorpkcz6h-${newChapter.number - 1}`, 'default')
+        revalidateTag(`prev-next-chapter-cmmjarau00000vhtkorpkcz6h-${newChapter.number}`, 'default')
+        revalidateTag(`prev-next-chapter-cmmjarau00000vhtkorpkcz6h-${newChapter.number + 1}`, 'default')
 
     } catch (error) {
         return fromErrorToActionState(error, formData)
