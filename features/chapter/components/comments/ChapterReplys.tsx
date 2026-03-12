@@ -1,0 +1,102 @@
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { Dispatch, Fragment, SetStateAction } from "react";
+import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { getChapterCommentReplys } from "../../queries/get-chapter-comments-replys";
+import { ChapterCommentReplyCreateForm } from "../form/ChapterCommentReplyCreateForm";
+import { ChapterReply } from "./ChapterReply";
+
+type ChapterReplysProps = {
+  commentId: string;
+  showReplyForm: boolean;
+  setShowReplyForm: Dispatch<SetStateAction<boolean>>;
+  chapterId: string;
+  replyCount: number;
+};
+
+const ChapterReplys = ({
+  commentId,
+  showReplyForm,
+  setShowReplyForm,
+  chapterId,
+  replyCount,
+}: ChapterReplysProps) => {
+  const queryKey = ["replys", commentId];
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey,
+      enabled: replyCount > 0,
+      queryFn: ({ pageParam }) =>
+        getChapterCommentReplys(commentId, pageParam, pageParam ? 3 : 2),
+      initialPageParam: undefined as string | undefined,
+      getNextPageParam: (lastPage) =>
+        lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
+    });
+
+  const replys = data?.pages.flatMap((page) => page.list);
+
+  const queryClient = useQueryClient();
+  const handleAddReply = () => queryClient.invalidateQueries({ queryKey });
+
+  const updateReplyCount = () =>
+    queryClient.invalidateQueries({ queryKey: ["comments", chapterId] });
+
+  const handleSuccess = () => {
+    handleAddReply();
+    setShowReplyForm(false);
+    updateReplyCount();
+  };
+
+  if (isLoading) {
+    return (
+      <div className="ml-27.5">
+        <CommentSkeleton />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {showReplyForm && (
+        <div className="mb-10">
+          <ChapterCommentReplyCreateForm
+            commentId={commentId}
+            handleSuccess={handleSuccess}
+            chapterId={chapterId}
+          />
+        </div>
+      )}
+      {isLoading && replyCount > 0 ? (
+        <div className="ml-27.5">
+          <CommentSkeleton />
+        </div>
+      ) : (
+        <div className="flex flex-col ml-27.5 gap-2 max-w-300">
+          {replys?.map((reply) => (
+            <ChapterReply
+              key={reply.id}
+              reply={reply}
+              commentId={commentId}
+              chapterId={chapterId}
+              handleSuccess={handleSuccess}
+            />
+          ))}
+          {isFetchingNextPage && <CommentSkeleton />}
+          {hasNextPage && !isFetchingNextPage && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src="https://yuzykc5xj5.ufs.sh/f/9ZvEbi04z0PNvGv2gQl3IxdhR2k0q7WrupQnHbNFwtA8KOJ6"
+              alt="dots icon"
+              width={66}
+              height={66}
+              className="cursor-pointer relative bottom-10"
+              onClick={() => {
+                fetchNextPage();
+              }}
+            />
+          )}
+        </div>
+      )}
+    </>
+  );
+};
+export { ChapterReplys };

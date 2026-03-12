@@ -29,6 +29,6 @@ export const addNovelCommentLike = async (novelCommentId: string) => {
             }
         })
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }

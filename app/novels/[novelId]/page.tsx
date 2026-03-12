@@ -1,9 +1,10 @@
 import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
+import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { NovelComments } from "@/features/novel/components/comments/NovelComments";
 import { NovelCard } from "@/features/novel/components/novelcard/NovelCard";
 import { NovelChapters } from "@/features/novel/components/NovelChapters";
 import { NovelChaptersLoader } from "@/features/novel/components/NovelChaptersLoader";
-import { NovelComments } from "@/features/novel/components/NovelComments";
 import { NovelRecommendations } from "@/features/novel/components/novelRecommendation/NovelRecommendations";
 import { getNovel } from "@/features/novel/queries/get-novel";
 import { searchParamsCache } from "@/features/novel/searchParams";
@@ -60,7 +61,7 @@ const NovelPage = async ({ params, searchParams }: NovelPageProps) => {
           target={false}
         />
       )}
-      <Suspense fallback={"Loading"}>
+      <Suspense fallback={<CommentSkeleton />}>
         <NovelComments novelId={novel.id} />
       </Suspense>
     </div>

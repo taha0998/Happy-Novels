@@ -2,8 +2,8 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { CommentLikeButton } from "@/components/comments/CommentLikeButton";
 import { Button } from "@/components/ui/button";
+import { CommentLikeButton } from "./CommentLikeButton";
 
 type CommentProps = {
   isOwner: boolean;

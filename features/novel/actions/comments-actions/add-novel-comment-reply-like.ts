@@ -26,7 +26,8 @@ export const addNovelCommentReplyLike = async (novelCommentReplyId: string) => {
                 profileId: profile.id,
             }
         })
+
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }

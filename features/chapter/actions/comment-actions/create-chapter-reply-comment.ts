@@ -2,32 +2,28 @@
 
 import z from "zod";
 import { ActionState, fromErrorToActionState, toActionState } from "@/components/form/utils/to-action-state";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
-const createNovelReplyCommentShema = z.object({
+const createChapterReplyCommentShema = z.object({
     content: z.string().min(1, { message: "reply can't be empty" }).max(1024)
 })
 
+export const createChapterReplyComment = async (commentId: string, chapterId: string, isReply: boolean, replyId: string | undefined, _actionState: ActionState, formData: FormData) => {
+    const profile = await getProfile();
 
-export const createNovelReplyComment = async (commentId: string, novelId: string, isReply: boolean, replyId: string | undefined, _actionState: ActionState, formData: FormData) => {
-    const { user } = await getAuthOrRedirect();
-
-    if (!user || !user.profile) {
-        return toActionState('ERROR', 'No Auth')
-    }
-    if (isReply && !replyId) {
-        return toActionState('ERROR', 'Target Reply is missing.')
-    }
+    if (!profile) return toActionState('ERROR', 'No Auth');
+    if (isReply && !replyId) return toActionState('ERROR', 'Target Reply is missing.');
 
     try {
-        const data = createNovelReplyCommentShema.parse(
+        const data = createChapterReplyCommentShema.parse(
             Object.fromEntries(formData)
         );
 
         let replyTo;
+
         if (isReply) {
-            const commentReplyTo = await prisma.novelCommentReply.findUnique({
+            const commentReplyTo = await prisma.chapterCommentReply.findUnique({
                 where: { id: replyId }
             })
             const replyToProfile = await prisma.profile.findUnique({
@@ -37,14 +33,15 @@ export const createNovelReplyComment = async (commentId: string, novelId: string
             replyTo = replyToProfile?.username
         }
 
-        await prisma.novelCommentReply.create({
+        await prisma.chapterCommentReply.create({
             data: {
-                novelcommentId: commentId,
-                profileId: user.profile[0].id,
+                chapterCommentId: commentId,
+                profileId: profile.id,
                 replyTo,
                 ...data
             }
         })
+
     } catch (error) {
         return fromErrorToActionState(error)
     }

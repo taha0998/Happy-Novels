@@ -32,7 +32,7 @@ type ConfirmDialogProps = {
 
 export const useConfirmDialog = ({
   title = "Are you absolutely sure?",
-  content = "This action cannot be undone. This will permanently delete your account from our servers.",
+  content = "This action cannot be undone. Make sure you understand the consequences.",
   trigger,
   action,
   onSuccess,

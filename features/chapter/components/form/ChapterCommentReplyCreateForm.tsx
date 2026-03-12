@@ -3,25 +3,31 @@
 import { useActionState } from "react";
 import { CommentReplyCreateForm } from "@/components/comments/form/CommentReplyCreateForm";
 import { EPMTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
-import { createNovelReplyComment } from "../../actions/comments-actions/create-novel-reply-comment";
+import { createChapterReplyComment } from "../../actions/comment-actions/create-chapter-reply-comment";
 
-type NovelCommentReplyCreateFormProps = {
+type ChapterCommentReplyCreateFormProps = {
   commentId: string;
   handleSuccess: () => void;
-  novelId: string;
+  chapterId: string;
   isReply?: boolean;
   replyId?: string;
 };
 
-const NovelCommentReplyCreateForm = ({
+const ChapterCommentReplyCreateForm = ({
   commentId,
   handleSuccess,
-  novelId,
+  chapterId,
   isReply = false,
   replyId,
-}: NovelCommentReplyCreateFormProps) => {
+}: ChapterCommentReplyCreateFormProps) => {
   const [actionState, action] = useActionState(
-    createNovelReplyComment.bind(null, commentId, novelId, isReply, replyId),
+    createChapterReplyComment.bind(
+      null,
+      commentId,
+      chapterId,
+      isReply,
+      replyId,
+    ),
     EPMTY_ACTION_STATE,
   );
 
@@ -33,4 +39,5 @@ const NovelCommentReplyCreateForm = ({
     />
   );
 };
-export { NovelCommentReplyCreateForm };
+
+export { ChapterCommentReplyCreateForm };

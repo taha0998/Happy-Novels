@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { ChapterComments } from "@/features/chapter/components/ChapterComments";
+import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { ChapterComments } from "@/features/chapter/components/comments/ChapterComments";
 import { getChapter } from "@/features/chapter/queries/get-chapter";
 import { Chapter } from "../components/Chapter";
 import { NextPrevGroup } from "../components/NextPrevGroup";
@@ -28,7 +29,7 @@ const ChapterPage = async ({ params }: ChapterPageProps) => {
         content={chapter.content}
       />
       <NextPrevGroup number={chapter.number} novelId={chapter.novelId} />
-      <Suspense fallback={null}>
+      <Suspense fallback={<CommentSkeleton />}>
         <ChapterComments chapterId={chapterId} />
       </Suspense>
     </div>

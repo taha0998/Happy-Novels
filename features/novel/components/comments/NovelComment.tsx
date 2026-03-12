@@ -1,18 +1,18 @@
 "use client";
-
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Comment } from "@/components/comments/components/Comment";
 import { ActionState } from "@/components/form/utils/to-action-state";
-import { Button } from "@/components/ui/button";
 import { useConfirmDialog } from "@/components/useConfirmDialog";
-import { Comment } from "@/features/comments/components/Comment";
-import { ChapterCommentWithMetadata } from "@/features/comments/types";
 import { toastStyle } from "@/utils/toastStyle";
+import { NovelCommentWithMetadata } from "../../../../components/comments/types";
+import { Button } from "../../../../components/ui/button";
+import { NovelReplys } from "./NovelReplys";
 
-type ChapterCommentProps = {
-  comment: ChapterCommentWithMetadata;
-  chapterId: string;
+type NovelCommentProps = {
+  comment: NovelCommentWithMetadata;
+  novelId: string;
   removeCommentAction: (commentId: string) => Promise<ActionState>;
   addCommentLike: (
     commentId: string,
@@ -22,13 +22,13 @@ type ChapterCommentProps = {
   ) => Promise<{ error: string } | null | undefined>;
 };
 
-const ChapterComment = ({
+const NovelComment = ({
   comment,
-  chapterId,
+  novelId,
   removeCommentAction,
   addCommentLike,
   removeCommentLike,
-}: ChapterCommentProps) => {
+}: NovelCommentProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [likes, setLikes] = useState(comment.totalLikes);
   const [isLiked, setIsLiked] = useState(comment.isLiked);
@@ -47,7 +47,7 @@ const ChapterComment = ({
     action: removeCommentAction.bind(null, comment.id),
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: ["comments", chapterId],
+        queryKey: ["comments", novelId],
       }),
   });
 
@@ -86,10 +86,15 @@ const ChapterComment = ({
           handleLikeAction={handleLikeAction}
           setShowReplyForm={setShowReplyForm}
         />
-        {/* Replys */}
+        <NovelReplys
+          commentId={comment.id}
+          showReplyForm={showReplyForm}
+          setShowReplyForm={setShowReplyForm}
+          novelId={novelId}
+          replyCount={comment.novelCommentReplys.length}
+        />
       </div>
     </>
   );
 };
-
-export { ChapterComment };
+export { NovelComment };

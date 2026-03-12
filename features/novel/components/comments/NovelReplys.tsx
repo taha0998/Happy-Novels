@@ -2,12 +2,12 @@
 "use client";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, Fragment, SetStateAction } from "react";
-import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
+import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
 import { NovelCommentReplyCreateForm } from "@/features/novel/components/forms/NovelCommentReplyCreateForm";
 import { getNovelCommentsReplys } from "@/features/novel/queries/get-novel-comments-replys";
-import { Reply } from "./Reply";
+import { NovelReply } from "./NovelReply";
 
-type ReplysProps = {
+type NovelReplysProps = {
   commentId: string;
   showReplyForm: boolean;
   setShowReplyForm: Dispatch<SetStateAction<boolean>>;
@@ -15,24 +15,20 @@ type ReplysProps = {
   replyCount: number;
 };
 
-const Replys = ({
+const NovelReplys = ({
   commentId,
   showReplyForm,
   setShowReplyForm,
   novelId,
   replyCount,
-}: ReplysProps) => {
+}: NovelReplysProps) => {
   const queryKey = ["replys", commentId];
   const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey,
       enabled: replyCount > 0,
       queryFn: ({ pageParam }) =>
-        getNovelCommentsReplys(
-          commentId,
-          pageParam,
-          pageParam === undefined ? 2 : 3,
-        ),
+        getNovelCommentsReplys(commentId, pageParam, pageParam ? 3 : 2),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) =>
         lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
@@ -67,7 +63,6 @@ const Replys = ({
             commentId={commentId}
             handleSuccess={handleSuccess}
             novelId={novelId}
-            reply={true}
           />
         </div>
       )}
@@ -78,15 +73,13 @@ const Replys = ({
       ) : (
         <div className="flex flex-col ml-27.5 gap-2 max-w-300">
           {replys?.map((reply) => (
-            <Fragment key={reply.id}>
-              <Reply
-                key={reply.id}
-                reply={reply}
-                commentId={commentId}
-                novelId={novelId}
-                handleSuccess={handleSuccess}
-              />
-            </Fragment>
+            <NovelReply
+              key={reply.id}
+              reply={reply}
+              commentId={commentId}
+              novelId={novelId}
+              handleSuccess={handleSuccess}
+            />
           ))}
           {isFetchingNextPage && <CommentSkeleton />}
           {hasNextPage && !isFetchingNextPage && (
@@ -107,4 +100,4 @@ const Replys = ({
   );
 };
 
-export { Replys };
+export { NovelReplys };

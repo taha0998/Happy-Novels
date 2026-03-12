@@ -1,12 +1,14 @@
 "use server"
+import { isOwner } from "@/features/auth/actions/is-owner";
 import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
 export const removeNovelCommentReplyLike = async (novelCommentReplyId: string) => {
     const profile = await getProfile()
 
-    if (!profile) { return { error: 'add-without-profile' } }
     try {
+        if (!profile) { return { error: 'add-without-profile' } }
+
         const isLiked = await prisma.linkNovelCommentReplyLikes.findUnique({
             where: {
                 profileId_novelCommentReplyId: {
@@ -15,10 +17,8 @@ export const removeNovelCommentReplyLike = async (novelCommentReplyId: string) =
                 }
             }
         })
-
-        if (!isLiked) {
-            return
-        }
+        if (!isLiked) return;
+        if (!isOwner(profile, isLiked)) return;
 
         await prisma.linkNovelCommentReplyLikes.delete({
             where: {
@@ -29,6 +29,6 @@ export const removeNovelCommentReplyLike = async (novelCommentReplyId: string) =
             }
         })
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }

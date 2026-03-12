@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: string, takeComments?: number) => {
     const profile = await getProfile()
 
-    const take = takeComments ? takeComments : 1;
+    const take = takeComments ? takeComments : 2;
     const where = {
         novelcommentId,
         id: {
@@ -28,7 +28,7 @@ export const getNovelCommentsReplys = async (novelcommentId: string, cursor?: st
                         userId: true
                     }
                 },
-                linkNovelCommentReplyLikes: true,
+                linkNovelCommentReplyLikes: { where: { profileId: profile?.id } },
                 _count: {
                     select: { linkNovelCommentReplyLikes: true }
                 }

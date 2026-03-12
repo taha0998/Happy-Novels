@@ -28,3 +28,11 @@ export type ChapterCommentWithMetadata = Prisma.ChapterCommentGetPayload<{
         _count: { select: { LinkChapterCommentLike: true } }
     }
 }> & { isOwner: boolean, isLiked: boolean, totalLikes: number };
+
+export type ChapterCommentReplyWithMetadata = Prisma.ChapterCommentReplyGetPayload<{
+    include: {
+        profile: { select: { username: true, userId: true } },
+        linkChapterCommentReplyLike: true,
+        _count: { select: { linkChapterCommentReplyLike: true } }
+    }
+}> & { isOwner: boolean; isLiked: boolean; totalLikes: number }

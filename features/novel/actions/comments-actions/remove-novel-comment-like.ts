@@ -24,7 +24,7 @@ export const removeNovelCommentLike = async (novelCommentId: string) => {
         })
 
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return null
     }
 }
