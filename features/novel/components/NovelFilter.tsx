@@ -1,11 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useQueryState } from "nuqs";
+import { useEffect, useTransition } from "react";
 import { CustomButton } from "@/components/CustomButton";
 import { CustomSearchInput } from "@/components/CustomSearchInput";
 import { filterList } from "../constant";
+import { filterNovelsParser } from "../searchParams";
 
 const NovelFilter = () => {
-  const [activeFilter, setActiveFilter] = useState("Latest");
+  const [filterNovels, setFilterNovels] = useQueryState(
+    "filterNovels",
+    filterNovelsParser,
+  );
+  const [, startTransition] = useTransition();
+
+  const handelClick = (filter: { label: string; filterKey: string }) => {
+    setFilterNovels(filter.filterKey, { startTransition });
+  };
+
+  useEffect(() => {
+    if (!filterList.some((i) => i.filterKey === filterNovels)) {
+      setFilterNovels("highest_rate");
+    }
+  }, [setFilterNovels, filterNovels]);
   return (
     <div
       className="flex flex-col gap-y-22.5 animate-fade-in-top"
@@ -20,8 +36,8 @@ const NovelFilter = () => {
               label={filter.label}
               padding="px-9 py-6"
               fontSize="text-[25px] font-medium"
-              active={filter.label === activeFilter}
-              onClick={() => setActiveFilter(filter.label)}
+              active={filter.filterKey === filterNovels}
+              onClick={() => handelClick(filter)}
             />
           ))}
         </div>

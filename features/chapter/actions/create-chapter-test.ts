@@ -13,38 +13,59 @@ const createChapterTestShema = z.object({
 })
 
 export const createChapterTest = async (_actionState: ActionState, formData: FormData) => {
+    const novelId = 'cmmjarau00000vhtkorpkcz6h';
 
     try {
         const data = createChapterTestShema.parse(
-            Object.fromEntries(formData)
+            Object.fromEntries(formData),
         )
         const existChapter = await prisma.chapter.findUnique({
             where: {
                 novelId_number: {
-                    novelId: 'cmmjarau00000vhtkorpkcz6h',
+                    novelId,
                     number: data.number
                 }
             }
         })
         if (existChapter) return toActionState('ERROR', 'Chapter already exist')
 
-        const newChapter = await prisma.chapter.create({
-            data: {
-                novelId: 'cmmjarau00000vhtkorpkcz6h',
-                ...data
-            }
-        })
+        const [newChapter] = await prisma.$transaction([
+            prisma.chapter.create({
+                data: {
+                    novelId,
+                    ...data
+                }
+            }),
+            prisma.novel.update({
+                where: { id: novelId },
+                data: {
+                    lastChapterCreatedAt: new Date()
+                }
+            }),
+            prisma.lastChapter.delete({
+                where: {
+                    novelId,
+                }
+            }),
+            prisma.lastChapter.create({
+                data: {
+                    number: data.number,
+                    novelId,
+                }
+            })
+        ])
+
 
 
         revalidateTag(`chapter-${newChapter.id}`, 'default')
 
-        revalidateTag(`prev-next-chapter-cmmjarau00000vhtkorpkcz6h-${newChapter.number - 1}`, 'default')
-        revalidateTag(`prev-next-chapter-cmmjarau00000vhtkorpkcz6h-${newChapter.number}`, 'default')
-        revalidateTag(`prev-next-chapter-cmmjarau00000vhtkorpkcz6h-${newChapter.number + 1}`, 'default')
+        revalidateTag(`prev-next-chapter-${novelId}-${newChapter.number - 1}`, 'default')
+        revalidateTag(`prev-next-chapter-${novelId}-${newChapter.number}`, 'default')
+        revalidateTag(`prev-next-chapter-${novelId}-${newChapter.number + 1}`, 'default')
 
     } catch (error) {
         return fromErrorToActionState(error, formData)
     }
-    revalidatePath(NovelPath('cmmjarau00000vhtkorpkcz6h'))
+    revalidatePath(NovelPath(novelId))
     return toActionState('SUCCESS', 'Chapter Created')
 }

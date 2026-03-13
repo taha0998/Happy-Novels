@@ -9,6 +9,7 @@ type NovelItemProps = {
   coverImg: string;
   rating: number;
   ratingCount: number;
+  lastChapter?: number;
 };
 
 const NovelItem = ({
@@ -17,6 +18,7 @@ const NovelItem = ({
   coverImg,
   rating,
   ratingCount,
+  lastChapter,
 }: NovelItemProps) => {
   return (
     <div className="flex flex-col w-86.25">
@@ -34,8 +36,16 @@ const NovelItem = ({
         <div className="flex flex-col mt-3 gap-2">
           <p className="text-[26px] font-medium line-clamp-2 ">{title}</p>
           <p className="text-[26px] font-medium">
-            ratings: <span className="text-primary">{rating}</span>/100 (
-            {fixedRatingCount(ratingCount)})
+            ratings: <span className="text-[#FE5311]">{rating}</span>
+            /100 ({fixedRatingCount(ratingCount)})
+          </p>
+          <p className="text-[26px] font-medium">
+            last chapter:{" "}
+            {lastChapter ? (
+              <span className="text-primary">{lastChapter}</span>
+            ) : (
+              <span className="text-primary">??</span>
+            )}
           </p>
         </div>
       </Link>

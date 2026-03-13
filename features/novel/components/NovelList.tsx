@@ -23,6 +23,7 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
             coverImg={novel.coverImg}
             rating={novel.rating}
             ratingCount={novel.ratingCount}
+            lastChapter={novel.LastChapter?.number}
           />
         ))}
         <div className="w-full mt-2.5 flex justify-center gap-4 ">

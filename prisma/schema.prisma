@@ -41,6 +41,7 @@ model Profile {
   chapterCommentReply         ChapterCommentReply[]
   linkChapterCommentReplyLike LinkChapterCommentReplyLike[]
   LinkChapterCommentLike      LinkChapterCommentLike[]
+  ChapterView                 ChapterView[]
 
   @@index([userId])
 }
@@ -63,21 +64,47 @@ model Novel {
   recommendedIn          NovelRecommendation[]   @relation("RecommendedNovel")
   linkWatchLaterNovels   LinkWatchLaterNovel[]
   linkNotificationNovels LinkNotificationNovel[]
+  lastChapterCreatedAt   DateTime?
+  LastChapter            LastChapter?
+}
+
+model LastChapter {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  number    Int
+  novelId   String   @unique
+  novel     Novel    @relation(fields: [novelId], references: [id], onDelete: Cascade)
+
+  @@index([novelId])
 }
 
 model Chapter {
-  id        String           @id @default(cuid())
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  title     String
-  number    Int
-  content   String
-  novelId   String
-  novel     Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
-  comment   ChapterComment[]
+  id          String           @id @default(cuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  title       String
+  number      Int
+  content     String
+  novelId     String
+  novel       Novel            @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  comment     ChapterComment[]
+  ChapterView ChapterView[]
 
   @@unique([novelId, number])
   @@index([novelId])
+}
+
+model ChapterView {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  profileId String?
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  chapterId String
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([chapterId])
 }
 
 model LinkFavoriteNovel {

@@ -20,7 +20,7 @@ const Chapter = ({ novelName, number, title, content }: ChapterProps) => {
           className="text-[37.21px]/[90.6px] mt-15 
           first-letter:text-primary first-letter:text-[60px] "
         >
-          {/* {paragraphs.map((paragraph, index) => (
+          {paragraphs.map((paragraph, index) => (
             <div key={index}>
               <p className="whitespace-pre-line">{paragraph}</p>
 
@@ -28,7 +28,7 @@ const Chapter = ({ novelName, number, title, content }: ChapterProps) => {
                 <span className="block h-0.75 w-full bg-background my-4"></span>
               )}
             </div>
-          ))} */}
+          ))}
         </div>
       </div>
     </>

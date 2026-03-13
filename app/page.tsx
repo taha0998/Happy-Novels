@@ -13,12 +13,13 @@ type HomePageProps = {
 export const revalidate = 30;
 
 const HomePage = ({ searchParams }: HomePageProps) => {
+  const parsedParams = searchParamsCache.parse(searchParams);
   return (
     <div className="flex flex-col w-[91%] self-center">
       <Title />
       <NovelFilter />
       <Suspense fallback={<NovelsSkeleton />}>
-        <NovelList searchParams={searchParamsCache.parse(searchParams)} />
+        <NovelList searchParams={parsedParams} />
       </Suspense>
     </div>
   );
