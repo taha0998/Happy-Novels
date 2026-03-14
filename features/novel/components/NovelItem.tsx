@@ -10,6 +10,7 @@ type NovelItemProps = {
   rating: number;
   ratingCount: number;
   lastChapter?: number;
+  totalViews: number;
 };
 
 const NovelItem = ({
@@ -19,6 +20,7 @@ const NovelItem = ({
   rating,
   ratingCount,
   lastChapter,
+  totalViews,
 }: NovelItemProps) => {
   return (
     <div className="flex flex-col w-86.25">
@@ -34,18 +36,21 @@ const NovelItem = ({
           loading="lazy"
         />
         <div className="flex flex-col mt-3 gap-2">
-          <p className="text-[26px] font-medium line-clamp-2 ">{title}</p>
-          <p className="text-[26px] font-medium">
+          <p className="text-[31.25px] font-medium line-clamp-2 ">{title}</p>
+          <p className="text-[25px] font-medium">
             ratings: <span className="text-[#FE5311]">{rating}</span>
             /100 ({fixedRatingCount(ratingCount)})
           </p>
-          <p className="text-[26px] font-medium">
+          <p className="text-[25px] font-medium">
             last chapter:{" "}
             {lastChapter ? (
               <span className="text-primary">{lastChapter}</span>
             ) : (
               <span className="text-primary">??</span>
             )}
+          </p>
+          <p className="text-[25px] font-medium">
+            total views: <span className="text-primary">{totalViews}</span>
           </p>
         </div>
       </Link>

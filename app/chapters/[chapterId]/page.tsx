@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { addChapterView } from "@/features/chapter/actions/add-chapter-view";
 import { ChapterComments } from "@/features/chapter/components/comments/ChapterComments";
 import { getChapter } from "@/features/chapter/queries/get-chapter";
 import { Chapter } from "../components/Chapter";
@@ -19,6 +20,7 @@ const ChapterPage = async ({ params }: ChapterPageProps) => {
   if (!chapter) {
     return notFound();
   }
+  await addChapterView(chapterId, chapter.novelId);
 
   return (
     <div className="w-440.5 self-center flex flex-col">

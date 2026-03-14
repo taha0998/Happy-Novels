@@ -16,10 +16,17 @@ export const filterNovelsParser = parseAsString.withDefault('highest_rate').with
     clearOnDefault: true
 })
 
+export const hotFilterTimeParser = parseAsString.withDefault('').withOptions({
+    shallow: false,
+    clearOnDefault: true,
+})
+
+
 export const searchParamsCache = createSearchParamsCache({
     page: paginationPageParser,
     chaptersPage: chaptersPaginationParser,
-    filterNovels: filterNovelsParser
+    filterNovels: filterNovelsParser,
+    hotFilterTime: hotFilterTimeParser
 })
 
 export type ParsedSearchParams = ReturnType<typeof searchParamsCache.parse>

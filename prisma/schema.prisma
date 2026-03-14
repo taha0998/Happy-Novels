@@ -66,6 +66,7 @@ model Novel {
   linkNotificationNovels LinkNotificationNovel[]
   lastChapterCreatedAt   DateTime?
   LastChapter            LastChapter?
+  ChapterView            ChapterView[]
 }
 
 model LastChapter {
@@ -100,9 +101,12 @@ model ChapterView {
   updatedAt DateTime @updatedAt
   profileId String?
   profile   Profile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  novelId   String
+  novel     Novel    @relation(fields: [novelId], references: [id], onDelete: Cascade)
   chapterId String
   chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
+  @@unique([profileId, chapterId, novelId])
   @@index([profileId])
   @@index([chapterId])
 }

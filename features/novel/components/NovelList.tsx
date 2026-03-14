@@ -1,6 +1,6 @@
 import { getNovels } from "../queries/get-novels";
 import { ParsedSearchParams } from "../searchParams";
-import { NovelItem } from "./NovelItem";
+import { NovelItems } from "./NovelItems";
 import { NovelNextPagination } from "./NovelNextPagination";
 import { NovelPrevPagination } from "./NovelPrevPagination";
 
@@ -15,17 +15,7 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
   return (
     <>
       <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 mt-15 animate-fade-in-top">
-        {novels.map((novel) => (
-          <NovelItem
-            key={novel.id}
-            id={novel.id}
-            title={novel.title}
-            coverImg={novel.coverImg}
-            rating={novel.rating}
-            ratingCount={novel.ratingCount}
-            lastChapter={novel.LastChapter?.number}
-          />
-        ))}
+        <NovelItems novels={novels} />
         <div className="w-full mt-2.5 flex justify-center gap-4 ">
           {<NovelPrevPagination />}
           {novels.length === 20 && novelsMetadata.hasNext && (
