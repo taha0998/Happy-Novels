@@ -1,10 +1,16 @@
 import { useQueryState } from "nuqs";
 import { useTransition } from "react";
 import { CustomButton } from "@/components/CustomButton";
-import { NovelHotFilterSkeleton } from "@/components/skeletons/NovelHotFilterSkeleton";
-import { hotFilterTimeParser } from "../../searchParams";
+import { hotFilterTimeParser } from "../searchParams";
+import { Novel } from "./NovelItems";
+import { NovelsSkeleton } from "./NovelsSkeleton";
 
-const HotNovelsFilter = () => {
+type NovelHotItemsProps = {
+  novels: Novel[];
+  getNovel: (novel: Novel) => React.ReactElement;
+};
+
+const NovelHotItems = ({ novels, getNovel }: NovelHotItemsProps) => {
   const [isPending, startTransition] = useTransition();
   const times = ["day", "week", "month"];
   const [filterTime, setFilterTime] = useQueryState(
@@ -18,10 +24,8 @@ const HotNovelsFilter = () => {
 
   return (
     <>
-      {isPending ? (
-        <NovelHotFilterSkeleton />
-      ) : (
-        <div className="flex gap-4">
+      <div className="flex flex-col">
+        <div className="flex gap-4 mb-15">
           {times.map((time) => {
             return (
               <CustomButton
@@ -36,8 +40,16 @@ const HotNovelsFilter = () => {
             );
           })}
         </div>
-      )}
+        {filterTime == "" && <div className="h-125 w-12.5"></div>}
+        {isPending ? (
+          <NovelsSkeleton />
+        ) : (
+          <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 animate-fade-in-top">
+            {novels.map((novel) => getNovel(novel))}
+          </div>
+        )}
+      </div>
     </>
   );
 };
-export { HotNovelsFilter };
+export { NovelHotItems };

@@ -1,12 +1,13 @@
 "use client";
 import { useQueryState } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { filterNovelsParser, hotFilterTimeParser } from "../searchParams";
-import { HotNovelsFilter } from "./filters/HotNovelsFilter";
 import { TypeNovelsFilter } from "./filters/TypeNovelsFilter";
+import { NovelHotItems } from "./NovelHotItems";
 import { NovelItem } from "./NovelItem";
+import { NovelsSkeleton } from "./NovelsSkeleton";
 
-type Novel = {
+export type Novel = {
   title: string;
   LastChapter: {
     number: number;
@@ -25,6 +26,7 @@ type NovelItemsProps = {
 };
 
 const NovelItems = ({ novels }: NovelItemsProps) => {
+  const [isPending, startTransition] = useTransition();
   const [filterNovels] = useQueryState("filterNovels", filterNovelsParser);
   const [filterTime, setFilterTime] = useQueryState(
     "hotFilterTime",
@@ -48,19 +50,18 @@ const NovelItems = ({ novels }: NovelItemsProps) => {
 
   useEffect(() => {
     if (filterNovels !== "hot") {
-      setFilterTime("");
+      setFilterTime("", { startTransition });
     }
   }, [filterTime, setFilterTime, filterNovels]);
+
+  if (isPending) {
+    return <NovelsSkeleton />;
+  }
 
   return (
     <>
       {filterNovels === "hot" ? (
-        <div className="flex flex-col">
-          <HotNovelsFilter />
-          <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 mt-15 animate-fade-in-top">
-            {novels.map((novel) => getNovel(novel))}
-          </div>
-        </div>
+        <NovelHotItems novels={novels} getNovel={getNovel} />
       ) : filterNovels === "types" ? (
         <>
           <TypeNovelsFilter />
