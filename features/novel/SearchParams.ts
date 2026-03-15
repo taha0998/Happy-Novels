@@ -21,12 +21,18 @@ export const hotFilterTimeParser = parseAsString.withDefault('').withOptions({
     clearOnDefault: true,
 })
 
+export const typeFilterParser = parseAsString.withDefault('').withOptions({
+    shallow: false,
+    clearOnDefault: true
+})
+
 
 export const searchParamsCache = createSearchParamsCache({
     page: paginationPageParser,
     chaptersPage: chaptersPaginationParser,
     filterNovels: filterNovelsParser,
-    hotFilterTime: hotFilterTimeParser
+    hotFilterTime: hotFilterTimeParser,
+    typeNovels: typeFilterParser
 })
 
 export type ParsedSearchParams = ReturnType<typeof searchParamsCache.parse>
