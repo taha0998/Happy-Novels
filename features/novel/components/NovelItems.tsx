@@ -1,39 +1,19 @@
 "use client";
 import { useQueryState } from "nuqs";
-import { useEffect, useTransition } from "react";
-import { filterNovelsParser, hotFilterTimeParser } from "../searchParams";
-import { TypeNovelsFilter } from "./filters/TypeNovelsFilter";
+import { NovelFilterType } from "@/components/comments/types";
+import { filterNovelsParser } from "../searchParams";
 import { NovelHotItems } from "./NovelHotItems";
 import { NovelItem } from "./NovelItem";
-import { NovelsSkeleton } from "./NovelsSkeleton";
-
-export type Novel = {
-  title: string;
-  LastChapter: {
-    number: number;
-  } | null;
-  id: string;
-  coverImg: string;
-  rating: number;
-  ratingCount: number;
-  _count: {
-    ChapterView: number;
-  };
-};
+import { NovelTypes } from "./NovelTyes";
 
 type NovelItemsProps = {
-  novels: Novel[];
+  novels: NovelFilterType[];
 };
 
 const NovelItems = ({ novels }: NovelItemsProps) => {
-  const [isPending, startTransition] = useTransition();
   const [filterNovels] = useQueryState("filterNovels", filterNovelsParser);
-  const [filterTime, setFilterTime] = useQueryState(
-    "hotFilterTime",
-    hotFilterTimeParser,
-  );
 
-  const getNovel = (novel: Novel) => {
+  const getNovel = (novel: NovelFilterType) => {
     return (
       <NovelItem
         key={novel.id}
@@ -48,23 +28,16 @@ const NovelItems = ({ novels }: NovelItemsProps) => {
     );
   };
 
-  useEffect(() => {
-    if (filterNovels !== "hot") {
-      setFilterTime("", { startTransition });
-    }
-  }, [filterTime, setFilterTime, filterNovels]);
-
-  if (isPending) {
-    return <NovelsSkeleton />;
-  }
-
   return (
     <>
       {filterNovels === "hot" ? (
         <NovelHotItems novels={novels} getNovel={getNovel} />
       ) : filterNovels === "types" ? (
         <>
-          <TypeNovelsFilter />
+          <NovelTypes />
+          <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 animate-fade-in-top">
+            {novels.map((novel) => getNovel(novel))}
+          </div>
         </>
       ) : (
         novels.map((novel) => getNovel(novel))

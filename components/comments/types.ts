@@ -1,5 +1,34 @@
 import { Prisma } from "@prisma/client";
 
+//Novel on filter
+
+export type NovelFilterType = {
+    LastChapter: {
+        number: number;
+    } | null;
+    _count: {
+        ChapterView: number;
+    };
+    id: string;
+    coverImg: string;
+    title: string;
+    rating: number;
+    ratingCount: number;
+    chapterViewCount?: bigint;
+    lastChapterNumber?: number | null;
+};
+
+export type NovelFilterMetadata = {
+    count: bigint;
+    hasNext: boolean;
+} | {
+    count: number;
+    hasNext: boolean;
+}
+
+
+
+
 //Novel Comment
 export type NovelCommentWithMetadata = Prisma.NovelCommentGetPayload<{
     include: {

@@ -1,23 +1,19 @@
 import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import { Title } from "@/components/Title";
-import { NovelFilter } from "@/features/novel/components/filters/NovelFilter";
+import { FirstHomePageSkeleton } from "@/components/skeletons/FirstHomePageSkeleton";
 import { NovelList } from "@/features/novel/components/NovelList";
-import { NovelsSkeleton } from "@/features/novel/components/NovelsSkeleton";
 import { searchParamsCache } from "@/features/novel/searchParams";
 
 type HomePageProps = {
   searchParams: Promise<SearchParams>;
 };
 
-export const revalidate = 30;
+export const revalidate = 3600;
 
 const HomePage = ({ searchParams }: HomePageProps) => {
   return (
     <div className="flex flex-col w-[91%] self-center">
-      <Title />
-      <NovelFilter />
-      <Suspense fallback={<NovelsSkeleton />}>
+      <Suspense fallback={<FirstHomePageSkeleton />}>
         <NovelList searchParams={searchParamsCache.parse(searchParams)} />
       </Suspense>
     </div>

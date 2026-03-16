@@ -19,5 +19,5 @@ export const getNovel = async (id: string) => unstable_cache(async () => {
     })
 },
     ["novel-details", id],
-    { revalidate: 3600, tags: [`novel-${id}`] }
+    { revalidate: 3600 * 24 * 7, tags: [`novel-${id}`] }
 )();

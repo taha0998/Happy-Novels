@@ -1,2 +1,5 @@
-//filters & search using nuqs
+//filter type & search using nuqs
 //add Breadcrumb
+//remove rating on most watched and latest
+//sumbit comment when click enter
+//novelSkeleton on top zindex hide every glitchs

@@ -1,8 +1,6 @@
 import { getNovels } from "../queries/get-novels";
 import { ParsedSearchParams } from "../searchParams";
-import { NovelItems } from "./NovelItems";
-import { NovelNextPagination } from "./NovelNextPagination";
-import { NovelPrevPagination } from "./NovelPrevPagination";
+import { NovelFilter } from "./filters/NovelFilter";
 
 type NovelListProps = {
   searchParams: ParsedSearchParams;
@@ -14,15 +12,7 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
 
   return (
     <>
-      <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 mt-15 animate-fade-in-top">
-        <NovelItems novels={novels} />
-        <div className="w-full mt-2.5 flex justify-center gap-4 ">
-          {<NovelPrevPagination />}
-          {novels.length === 20 && novelsMetadata.hasNext && (
-            <NovelNextPagination />
-          )}
-        </div>
-      </div>
+      <NovelFilter novels={novels} novelsMetadata={novelsMetadata} />
     </>
   );
 };

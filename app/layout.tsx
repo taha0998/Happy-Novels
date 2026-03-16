@@ -2,7 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Rubik } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Suspense } from "react";
 import { Footer } from "@/components/Footer";
+import { HeaderSkeleton } from "@/components/skeletons/HeaderSkeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "./_navigation/Header";
 import { ReactQueryProvider } from "./_providers/react-query-provider";
@@ -40,7 +42,9 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <ReactQueryProvider>
-            <Header />
+            <Suspense fallback={<HeaderSkeleton />}>
+              <Header />
+            </Suspense>
             {children}
             <Footer />
             <Toaster expand />

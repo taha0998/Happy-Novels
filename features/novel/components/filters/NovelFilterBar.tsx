@@ -1,3 +1,4 @@
+"use client";
 import clsx from "clsx";
 import { CustomButton } from "@/components/CustomButton";
 import { CustomSearchInput } from "@/components/CustomSearchInput";
@@ -23,7 +24,7 @@ const NovelFilterBar = ({
   return (
     <>
       <div
-        className={clsx("flex flex-col gap-y-22.5 ", {
+        className={clsx("flex flex-col gap-y-22.5 mb-15 ", {
           "animate-fade-in-top": clicked === false,
         })}
         id="filter-bar"

@@ -16,21 +16,25 @@ export const getNovels = (async (searchParams: ParsedSearchParams) => {
 
     if (SearchParams.filterNovels === 'hot') {
         const hotTime = SearchParams.hotFilterTime;
-        if (hotTime === 'day') { return await getHotNovels(searchParams, 1) }
-        else if (hotTime === 'week') { return await getHotNovels(searchParams, 7) }
-        else if (hotTime === 'month') { return await getHotNovels(searchParams, 30) }
+        if (hotTime !== '') {
+            if (hotTime === 'day') { return await getHotNovels(searchParams, 1) }
+            else if (hotTime === 'week') { return await getHotNovels(searchParams, 7) }
+            else if (hotTime === 'month') { return await getHotNovels(searchParams, 30) }
+        }
         else {
-            return {
-                list: [],
-                metadata: { count: 0, hasNext: false }
-            }
+            return await getHotNovels(searchParams, 7)
         }
     }
 
     if (SearchParams.filterNovels === 'types') {
-        return {
-            list: [],
-            metadata: { count: 0, hasNext: false }
+        const typeSelected = SearchParams.typeNovels
+        if (typeSelected === '') {
+            return {
+                list: [],
+                metadata: { count: 0, hasNext: false }
+            }
+        } else {
+            return await getHotNovels(searchParams, 7)
         }
     }
 

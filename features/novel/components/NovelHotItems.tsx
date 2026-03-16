@@ -1,18 +1,17 @@
 import { useQueryState } from "nuqs";
 import { useTransition } from "react";
+import { NovelFilterType } from "@/components/comments/types";
 import { CustomButton } from "@/components/CustomButton";
 import { hotFilterTimeParser } from "../searchParams";
-import { Novel } from "./NovelItems";
 import { NovelsSkeleton } from "./NovelsSkeleton";
 
 type NovelHotItemsProps = {
-  novels: Novel[];
-  getNovel: (novel: Novel) => React.ReactElement;
+  novels: NovelFilterType[];
+  getNovel: (novel: NovelFilterType) => React.ReactElement;
 };
 
 const NovelHotItems = ({ novels, getNovel }: NovelHotItemsProps) => {
   const [isPending, startTransition] = useTransition();
-  const times = ["day", "week", "month"];
   const [filterTime, setFilterTime] = useQueryState(
     "hotFilterTime",
     hotFilterTimeParser,
@@ -26,21 +25,31 @@ const NovelHotItems = ({ novels, getNovel }: NovelHotItemsProps) => {
     <>
       <div className="flex flex-col">
         <div className="flex gap-4 mb-15">
-          {times.map((time) => {
-            return (
-              <CustomButton
-                key={time}
-                variant={"outline"}
-                label={time}
-                padding="px-9 py-6"
-                fontSize="text-[25px] font-medium"
-                active={time === filterTime}
-                onClick={() => handleClick(time)}
-              />
-            );
-          })}
+          <CustomButton
+            variant={"outline"}
+            label={"day"}
+            padding="px-9 py-6"
+            fontSize="text-[25px] font-medium"
+            active={filterTime === "day"}
+            onClick={() => handleClick("day")}
+          />
+          <CustomButton
+            variant={"outline"}
+            label={"week"}
+            padding="px-9 py-6"
+            fontSize="text-[25px] font-medium"
+            active={filterTime === "week" || filterTime === ""}
+            onClick={() => handleClick("week")}
+          />
+          <CustomButton
+            variant={"outline"}
+            label={"month"}
+            padding="px-9 py-6"
+            fontSize="text-[25px] font-medium"
+            active={filterTime === "month"}
+            onClick={() => handleClick("month")}
+          />
         </div>
-        {filterTime == "" && <div className="h-125 w-12.5"></div>}
         {isPending ? (
           <NovelsSkeleton />
         ) : (

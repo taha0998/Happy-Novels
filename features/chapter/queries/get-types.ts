@@ -1,8 +1,9 @@
 'use server';
 
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
-export const getTypes = async () => {
+export const getTypes = async () => unstable_cache(async () => {
     const types = await prisma.type.findMany({
         orderBy: {
             linkTypeNovels: {
@@ -16,4 +17,6 @@ export const getTypes = async () => {
         }
     })
     return types;
-}
+},
+    ['types'],
+    { revalidate: 3600 * 24 * 365, tags: ['types'] })();
