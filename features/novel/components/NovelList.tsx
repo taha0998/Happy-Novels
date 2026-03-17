@@ -1,6 +1,7 @@
 import { getNovels } from "../queries/get-novels";
 import { ParsedSearchParams } from "../searchParams";
 import { NovelFilter } from "./filters/NovelFilter";
+import { NovelItems } from "./NovelItems";
 
 type NovelListProps = {
   searchParams: ParsedSearchParams;
@@ -12,7 +13,11 @@ const NovelList = async ({ searchParams }: NovelListProps) => {
 
   return (
     <>
-      <NovelFilter novels={novels} novelsMetadata={novelsMetadata} />
+      <NovelFilter
+        novels={novels}
+        novelsMetadata={novelsMetadata}
+        novelItems={<NovelItems novels={novels} searchParams={searchParams} />}
+      />
     </>
   );
 };

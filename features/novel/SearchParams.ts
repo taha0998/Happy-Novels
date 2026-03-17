@@ -26,8 +26,14 @@ export const typeFilterParser = parseAsString.withDefault('').withOptions({
     clearOnDefault: true
 })
 
+export const searchParser = parseAsString.withDefault('').withOptions({
+    shallow: false,
+    clearOnDefault: true
+})
+
 
 export const searchParamsCache = createSearchParamsCache({
+    search: searchParser,
     page: paginationPageParser,
     chaptersPage: chaptersPaginationParser,
     filterNovels: filterNovelsParser,

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { CustomButton } from "@/components/CustomButton";
-import { TypeWithCount } from "../NovelTyes";
+import { TypeWithCount } from "../NovelTypes";
 
 type NovelTypesFilterProps = {
   types: TypeWithCount[];

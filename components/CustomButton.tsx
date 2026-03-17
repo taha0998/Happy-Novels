@@ -36,7 +36,7 @@ const CustomButton = ({
       hoverScale={active ? 1 : 1.03}
       tapScale={1}
       className={cn(
-        "flex justify-center select-none",
+        "flex justify-center select-none ",
         padding ? padding : "px-7",
         active ? "bg-primary text-background " : "",
         fontSize ? fontSize : "",

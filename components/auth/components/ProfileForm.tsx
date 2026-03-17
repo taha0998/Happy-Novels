@@ -1,8 +1,8 @@
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getAuth } from "@/features/auth/queries/get-auth";
 import { ProfileModule } from "./ProfileModule";
 
 const ProfileForm = async () => {
-  const { user } = await getAuthOrRedirect();
+  const { user } = await getAuth();
   const profile = user?.profile[0];
   return <>{user ? profile ? <></> : <ProfileModule /> : <></>}</>;
 };

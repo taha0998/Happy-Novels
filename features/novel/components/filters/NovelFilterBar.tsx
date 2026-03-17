@@ -1,7 +1,6 @@
 "use client";
 import clsx from "clsx";
 import { CustomButton } from "@/components/CustomButton";
-import { CustomSearchInput } from "@/components/CustomSearchInput";
 
 type Filter = {
   label: string;
@@ -13,6 +12,7 @@ type NovelFilterBarProps = {
   filterNovels: string;
   handleClick: (filter: Filter) => void;
   clicked: boolean;
+  NovelSearchInput: React.ReactElement;
 };
 
 const NovelFilterBar = ({
@@ -20,6 +20,7 @@ const NovelFilterBar = ({
   filterNovels,
   handleClick,
   clicked,
+  NovelSearchInput,
 }: NovelFilterBarProps) => {
   return (
     <>
@@ -43,9 +44,7 @@ const NovelFilterBar = ({
               />
             ))}
           </div>
-          <div className="flex justify-center items-center">
-            <CustomSearchInput />
-          </div>
+          {NovelSearchInput}
         </div>
       </div>
     </>

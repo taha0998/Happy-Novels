@@ -14,7 +14,7 @@ const NovelCardImg = ({ coverImg, title }: NovelCardImgProps) => {
         width={573.24}
         height={822.6}
         className="border-[6.71px] border-primary rounded-[13.42px]"
-        unoptimized={true}
+        loading="eager"
       />
     </div>
   );

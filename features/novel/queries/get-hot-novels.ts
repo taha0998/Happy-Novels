@@ -9,12 +9,13 @@ export const getHotNovels = async (searchParams: ParsedSearchParams, time: numbe
     const take = 20;
     const skip = SearchParams.page * take;
 
-
-
     const now = new Date();
-
     const selectedDate = new Date();
     selectedDate.setDate(selectedDate.getDate() - time);
+
+    const searchCondition = SearchParams.search
+        ? Prisma.sql`WHERE (n."title" ILIKE ${`%${SearchParams.search}%`} OR n."description" ILIKE ${`%${SearchParams.search}%`})`
+        : Prisma.empty;
 
     const [rawNovels, [{ count }]] = await prisma.$transaction([
         prisma.$queryRaw<{
@@ -42,6 +43,7 @@ export const getHotNovels = async (searchParams: ParsedSearchParams, time: numbe
             AND cv."createdAt" <= ${now}
         LEFT JOIN "Chapter" c
             ON c."novelId" = n."id"
+        ${searchCondition}
         GROUP BY n."id", n."coverImg", n."title", n."rating", n."ratingCount"
         HAVING COUNT(DISTINCT cv."id") > 0
         ORDER BY "chapterViewCount" DESC
@@ -58,13 +60,13 @@ export const getHotNovels = async (searchParams: ParsedSearchParams, time: numbe
                         ON cv."novelId" = n."id"
                         AND cv."createdAt" >= ${selectedDate}
                         AND cv."createdAt" <= ${now}
+                    ${searchCondition}
                     GROUP BY n."id"
                     HAVING COUNT(DISTINCT cv."id") > 0
                 ) AS filtered_novels
             `
         )
-    ])
-
+    ]);
 
     const transformedNovels = rawNovels.map(novel => ({
         ...novel,
@@ -78,7 +80,6 @@ export const getHotNovels = async (searchParams: ParsedSearchParams, time: numbe
 
     const hasNext = count > (take + skip);
 
-
     return {
         list: transformedNovels,
         metadata: {
@@ -86,5 +87,4 @@ export const getHotNovels = async (searchParams: ParsedSearchParams, time: numbe
             hasNext,
         }
     };
-
-}
+};

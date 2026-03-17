@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileForm } from "@/components/auth/components/ProfileForm";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getAuth } from "@/features/auth/queries/get-auth";
+import { AccountDropDown } from "@/features/profile/components/AccountDropDown";
 import { HomePath, SignInPath, SignUpPath } from "@/lib/paths";
 import { CustomButton } from "../../components/CustomButton";
 
 const Header = async () => {
-  const { user } = await getAuthOrRedirect();
+  const { user } = await getAuth();
   if (user && !user?.profile[0]) {
     return <ProfileForm />;
   }
@@ -37,7 +38,7 @@ const Header = async () => {
             </Link>
           </>
         ) : (
-          <>{user.profile[0].username}</>
+          <AccountDropDown username={user.profile[0].username} />
         )}
         <CustomButton
           label="Donate"

@@ -1,16 +1,17 @@
 "use client";
 import { useQueryState } from "nuqs";
 import { NovelFilterType } from "@/components/comments/types";
-import { filterNovelsParser } from "../searchParams";
+import { filterNovelsParser, ParsedSearchParams } from "../searchParams";
 import { NovelHotItems } from "./NovelHotItems";
 import { NovelItem } from "./NovelItem";
-import { NovelTypes } from "./NovelTyes";
+import { NovelTypes } from "./NovelTypes";
 
 type NovelItemsProps = {
   novels: NovelFilterType[];
+  searchParams: ParsedSearchParams;
 };
 
-const NovelItems = ({ novels }: NovelItemsProps) => {
+const NovelItems = ({ novels, searchParams }: NovelItemsProps) => {
   const [filterNovels] = useQueryState("filterNovels", filterNovelsParser);
 
   const getNovel = (novel: NovelFilterType) => {
@@ -34,10 +35,11 @@ const NovelItems = ({ novels }: NovelItemsProps) => {
         <NovelHotItems novels={novels} getNovel={getNovel} />
       ) : filterNovels === "types" ? (
         <>
-          <NovelTypes />
-          <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 animate-fade-in-top">
-            {novels.map((novel) => getNovel(novel))}
-          </div>
+          <NovelTypes
+            novels={novels}
+            getNovel={getNovel}
+            searchParams={searchParams}
+          />
         </>
       ) : (
         novels.map((novel) => getNovel(novel))

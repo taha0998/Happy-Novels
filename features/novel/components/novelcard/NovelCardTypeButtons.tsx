@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { TypePath } from "@/lib/paths";
 
 type Type = {
   id: string;
@@ -20,8 +22,11 @@ const NovelCardTypeButtons = ({ types }: NovelCardTypeButtonsProps) => {
           size="none"
           variant="default"
           className="text-[27px] self-center cursor-pointer px-3.75 py-1.75"
+          asChild
         >
-          {type.name}
+          <Link href={TypePath(type.name)} prefetch={false}>
+            {type.name}
+          </Link>
         </Button>
       ))}
     </div>

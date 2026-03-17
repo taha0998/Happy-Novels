@@ -28,13 +28,21 @@ export const getNovels = (async (searchParams: ParsedSearchParams) => {
 
     if (SearchParams.filterNovels === 'types') {
         const typeSelected = SearchParams.typeNovels
-        if (typeSelected === '') {
+        if (typeSelected !== '') {
+            where = {
+                linkTypeNovels: {
+                    some: {
+                        type: {
+                            name: SearchParams.typeNovels
+                        }
+                    }
+                },
+            }
+        } else {
             return {
                 list: [],
                 metadata: { count: 0, hasNext: false }
             }
-        } else {
-            return await getHotNovels(searchParams, 7)
         }
     }
 
@@ -54,7 +62,23 @@ export const getNovels = (async (searchParams: ParsedSearchParams) => {
 
     const [novels, count] = await prisma.$transaction([
         prisma.novel.findMany({
-            where,
+            where: {
+                ...where,
+                OR: [
+                    {
+                        title: {
+                            contains: SearchParams.search,
+                            mode: 'insensitive' as const
+
+                        }
+                    }, {
+                        description: {
+                            contains: SearchParams.search,
+                            mode: 'insensitive' as const
+                        }
+                    }
+                ]
+            },
             skip,
             take,
             orderBy,

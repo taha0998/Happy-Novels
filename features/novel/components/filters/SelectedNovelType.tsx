@@ -1,20 +1,29 @@
+import Link from "next/link";
 import { CustomButton } from "@/components/CustomButton";
+import { AllTypesPath } from "@/lib/paths";
 
 type SelectedNovelTypeProps = {
   name: string;
   count: number;
+  constLoading?: boolean;
 };
 
-const SelectedNovelType = ({ name, count }: SelectedNovelTypeProps) => {
+const SelectedNovelType = ({
+  name,
+  count,
+  constLoading,
+}: SelectedNovelTypeProps) => {
   return (
     <>
-      <CustomButton
-        variant={"outline"}
-        label={`${name} ( ${count} )`}
-        padding="px-9 py-6"
-        fontSize="text-[25px] font-medium"
-        active={true}
-      />
+      <Link href={AllTypesPath()}>
+        <CustomButton
+          variant={"outline"}
+          label={`${name} ( ${constLoading ? "..." : count} )`}
+          padding="px-9 py-6"
+          fontSize="text-[25px] font-medium"
+          active={true}
+        />
+      </Link>
     </>
   );
 };

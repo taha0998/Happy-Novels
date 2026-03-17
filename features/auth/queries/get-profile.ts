@@ -1,9 +1,9 @@
 'use server';
 
-import { getAuthOrRedirect } from "./get-auth-or-redirect";
+import { getAuth } from "./get-auth";
 
 export const getProfile = async () => {
-    const { user } = await getAuthOrRedirect()
+    const { user } = await getAuth()
     if (!user) return undefined;
 
     const profile = user.profile[0]

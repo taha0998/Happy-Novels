@@ -6,7 +6,7 @@ import z from "zod";
 import { ActionState, fromErrorToActionState, toActionState } from "@/components/form/utils/to-action-state";
 import { HomePath } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
-import { getAuthOrRedirect } from "../queries/get-auth-or-redirect";
+import { getAuth } from "../queries/get-auth";
 
 
 const createProfileShema = z.object({
@@ -18,7 +18,7 @@ export const createProfile = async (_actionState: ActionState, formData: FormDat
         const { username } = createProfileShema.parse(
             Object.fromEntries(formData)
         )
-        const { user } = await getAuthOrRedirect();
+        const { user } = await getAuth();
         if (!user) return toActionState('ERROR', 'Not authorized');
 
         const existingUsername = await prisma.profile.findUnique({
