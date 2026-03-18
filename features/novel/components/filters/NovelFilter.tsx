@@ -94,7 +94,7 @@ const NovelFilter = ({
             {filterNovels === "types" && <NovelTypeFilterSkeleton />}
           </>
         ) : (
-          <div className="w-full flex flex-wrap gap-x-29.25 gap-y-15 animate-fade-in-top ">
+          <div className="w-full flex flex-wrap gap-x-21.75 gap-y-15 animate-fade-in-top ">
             {novelItems}
             <div className="w-full mt-2.5 flex justify-center gap-4 ">
               {<NovelPrevPagination />}
