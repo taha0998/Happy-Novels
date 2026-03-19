@@ -63,7 +63,7 @@ const Reply = ({
           className="rounded-full h-20 w-20"
         />
         <p
-          className={clsx("font-medium text-[33px]", {
+          className={clsx("font-medium text-[31px]", {
             "line-clamp-2": !isOpen,
             "cursor-pointer": !isOpen && isTruncated,
             "cursor-default": !isTruncated,
@@ -96,7 +96,7 @@ const Reply = ({
 
           <Button
             variant="ghost"
-            className="text-[30px] py-7 px-2 text-[#385A71] hover:bg-foreground"
+            className="text-[24.8px] py-7 px-2 text-[#385A71] hover:bg-foreground"
             onClick={() => setShowReplyForm((state) => !state)}
           >
             reply
@@ -105,6 +105,7 @@ const Reply = ({
             likes={likes}
             isLiked={isLiked}
             onClick={handleLikeAction}
+            reply={true}
           />
         </div>
       </div>

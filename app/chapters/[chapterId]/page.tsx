@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
 import { addChapterView } from "@/features/chapter/actions/add-chapter-view";
 import { ChapterComments } from "@/features/chapter/components/comments/ChapterComments";
 import { getChapter } from "@/features/chapter/queries/get-chapter";

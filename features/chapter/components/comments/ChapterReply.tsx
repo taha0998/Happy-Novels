@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Reply } from "@/components/comments/components/Replys";
+import { Reply } from "@/components/comments/Replys";
 import { ChapterCommentReplyWithMetadata } from "@/components/comments/types";
 import { Button } from "@/components/ui/button";
 import { useConfirmDialog } from "@/components/useConfirmDialog";

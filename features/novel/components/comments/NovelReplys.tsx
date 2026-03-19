@@ -2,7 +2,7 @@
 "use client";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, Fragment, SetStateAction } from "react";
-import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
 import { NovelCommentReplyCreateForm } from "@/features/novel/components/forms/NovelCommentReplyCreateForm";
 import { getNovelCommentsReplys } from "@/features/novel/queries/get-novel-comments-replys";
 import { NovelReply } from "./NovelReply";

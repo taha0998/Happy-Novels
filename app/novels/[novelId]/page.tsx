@@ -1,6 +1,6 @@
 import { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
 import { NovelComments } from "@/features/novel/components/comments/NovelComments";
 import { NovelCard } from "@/features/novel/components/novelcard/NovelCard";
 import { NovelChapters } from "@/features/novel/components/NovelChapters";

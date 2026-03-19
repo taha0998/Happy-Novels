@@ -1,55 +1,42 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NovelItem } from "@/features/novel/components/NovelItem";
+import { FavoritePath, WatchingPath, WatchLaterPath } from "@/lib/paths";
 
-//use nuqs to filter getProfileTabNovels ?tab=
-
-const ProfileTabs = () => {
-  const TabsTriggerJsx = (name: string) => {
-    return (
+export const TabsTriggerJsx = (name: string, path: string) => {
+  return (
+    <Link href={path} prefetch={false} className="w-full h-full">
       <TabsTrigger
         value={name}
-        className="p-0 after:top-12.5 after:border-primary after:w-[115%] after:border-b-4 mr-15"
+        className="p-0 after:top-12.5 after:border-primary after:w-[115%] after:border-b-4 mr-15 cursor-pointer"
       >
         <p className="text-[38.75px]">{name}</p>
       </TabsTrigger>
-    );
-  };
-  const TabsContentJsx = () => {
-    return (
-      <NovelItem
-        id="cmmjb024p0001vhtkbu55m5in"
-        title="Shadow Slave"
-        coverImg="https://yuzykc5xj5.ufs.sh/f/9ZvEbi04z0PNWAEpHA4oVxHX8Q1E9Rj4JigWzr7tZbCAUnu2"
-        profileList={true}
-      />
-    );
-  };
-
-  return (
-    <>
-      <Tabs defaultValue="Favorite">
-        <TabsList variant="line" className="p-0">
-          {TabsTriggerJsx("Favorite")}
-          {TabsTriggerJsx("Watching")}
-          {TabsTriggerJsx("Watch later")}
-        </TabsList>
-        <div className="h-1 w-[95.6%] bg-foreground/30  mt-1.75 ml-px rounded-full"></div>
-        <TabsContent value="Favorite">
-          <div className="max-w-317 flex flex-wrap gap-7.25 mt-7.5">
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-            {TabsContentJsx()}
-          </div>
-        </TabsContent>
-        <TabsContent value="password">Change your password here.</TabsContent>
-      </Tabs>
-    </>
+    </Link>
   );
 };
-export { ProfileTabs };
+
+type TabsContentJsxProps = {
+  id: string;
+  title: string;
+  coverImg: string;
+};
+export const TabsContentJsx = ({
+  id,
+  title,
+  coverImg,
+}: TabsContentJsxProps) => {
+  return (
+    <NovelItem id={id} title={title} coverImg={coverImg} profileList={true} />
+  );
+};
+
+export const TabsListJsx = () => {
+  return (
+    <TabsList variant="line" className="p-0">
+      {TabsTriggerJsx("Favorite", FavoritePath())}
+      {TabsTriggerJsx("Watching", WatchingPath())}
+      {TabsTriggerJsx("Watch later", WatchLaterPath())}
+    </TabsList>
+  );
+};

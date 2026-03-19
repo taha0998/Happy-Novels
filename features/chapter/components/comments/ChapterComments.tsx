@@ -3,7 +3,7 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
 import { CreateForm } from "@/features/novel/components/forms/CommentCreateForm";
 import { addChapterCommentLike } from "../../actions/comment-actions/add-chapter-comment-like";
 import { createChapterComment } from "../../actions/comment-actions/create-chapter-comment";

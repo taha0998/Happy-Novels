@@ -60,7 +60,7 @@ const Comment = ({
           />
           <p
             ref={commentRef}
-            className={clsx("font-medium", {
+            className={clsx("font-medium text-[38.75px]", {
               "line-clamp-3 ": !isOpen,
               "cursor-pointer ": !isOpen && isTruncated,
               "cursor-default": !isTruncated,
@@ -88,7 +88,7 @@ const Comment = ({
             )}
             <Button
               variant="ghost"
-              className="text-[30px] py-7 px-2 text-secondary-foreground hover:bg-foreground"
+              className="text-[31px] py-7 px-2 text-secondary-foreground hover:bg-foreground"
               onClick={() => setShowReplyForm((state) => !state)}
             >
               reply

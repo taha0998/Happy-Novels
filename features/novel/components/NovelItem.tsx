@@ -49,10 +49,14 @@ const NovelItem = ({
   }, [filterNovels]);
 
   useEffect(() => {
+    if (filterNovels === "hot" && hotFilterTime == "") {
+      setHotViewsTextFilter("week");
+    }
+
     if (hotFilterTime) {
       setHotViewsTextFilter(hotFilterTime);
     }
-  }, [hotFilterTime]);
+  }, [hotFilterTime, filterNovels]);
 
   return (
     <div className="flex flex-col max-w-92">

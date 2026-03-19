@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Comment } from "@/components/comments/components/Comment";
+import { Comment } from "@/components/comments/Comment";
 import { ChapterCommentWithMetadata } from "@/components/comments/types";
 import { ActionState } from "@/components/form/utils/to-action-state";
 import { Button } from "@/components/ui/button";

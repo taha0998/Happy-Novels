@@ -42,6 +42,7 @@ model Profile {
   linkChapterCommentReplyLike LinkChapterCommentReplyLike[]
   LinkChapterCommentLike      LinkChapterCommentLike[]
   ChapterView                 ChapterView[]
+  LinkWatchingNovel           LinkWatchingNovel[]
 
   @@index([userId])
 }
@@ -67,6 +68,7 @@ model Novel {
   lastChapterCreatedAt   DateTime?
   LastChapter            LastChapter?
   ChapterView            ChapterView[]
+  LinkWatchingNovel      LinkWatchingNovel[]
 }
 
 model LastChapter {
@@ -125,12 +127,23 @@ model LinkFavoriteNovel {
 }
 
 model LinkWatchLaterNovel {
-  id        String  @id @default(cuid())
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   novelId   String
   novel     Novel   @relation(fields: [novelId], references: [id], onDelete: Cascade)
 
+  @@id([profileId, novelId])
+  @@index([profileId])
+  @@index([novelId])
+}
+
+model LinkWatchingNovel {
+  profileId String
+  profiel   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  novelId   String
+  novel     Novel   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, novelId])
   @@index([profileId])
   @@index([novelId])
 }

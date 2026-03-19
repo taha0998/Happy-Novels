@@ -2,7 +2,7 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
 import { addNovelCommentLike } from "../../actions/comments-actions/add-novel-comment-like";
 import { createNovelComment } from "../../actions/comments-actions/create-novel-comment";
 import { removeNovelComment } from "../../actions/comments-actions/remove-novel-comment";

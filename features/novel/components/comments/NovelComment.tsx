@@ -2,7 +2,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Comment } from "@/components/comments/components/Comment";
+import { Comment } from "@/components/comments/Comment";
 import { ActionState } from "@/components/form/utils/to-action-state";
 import { useConfirmDialog } from "@/components/useConfirmDialog";
 import { toastStyle } from "@/utils/toastStyle";
@@ -39,7 +39,7 @@ const NovelComment = ({
     trigger: (
       <Button
         variant={"ghost"}
-        className="text-[30px] py-7 px-2 text-[#FE5311] hover:bg-[#FE5311]"
+        className="text-[31px] py-7 px-2 text-[#FE5311] hover:bg-[#FE5311]"
       >
         delete
       </Button>

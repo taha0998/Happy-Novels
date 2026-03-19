@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { NovelAddToDialog } from "../NovelAddToDialog";
 
 type NovelCardImgProps = {
   coverImg: string;
@@ -7,7 +8,8 @@ type NovelCardImgProps = {
 
 const NovelCardImg = ({ coverImg, title }: NovelCardImgProps) => {
   return (
-    <div className="min-w-[573.24px] max-h-[822.6px] novel-image-border border-primary rounded-[13.42px]">
+    <div className="min-w-[573.24px] max-h-[822.6px] novel-image-border border-primary rounded-[13.42px] relative">
+      <NovelAddToDialog />
       <Image
         src={coverImg}
         alt={`${title} cover image`}

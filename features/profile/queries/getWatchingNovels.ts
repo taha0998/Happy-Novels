@@ -3,28 +3,25 @@
 import { getProfile } from "@/features/auth/queries/get-profile";
 import { prisma } from "@/lib/prisma";
 
-export const getFavoriteNovels = async () => {
+export const getWatchingNovels = async () => {
     const profile = await getProfile();
 
     try {
         if (!profile) return;
-
-        return await prisma.linkFavoriteNovel.findMany({
+        return await prisma.linkWatchingNovel.findMany({
             where: {
                 profileId: profile.id
             },
-            orderBy: { createdAt: 'desc' },
             select: {
                 novel: {
                     select: {
                         id: true,
                         title: true,
-                        coverImg: true,
+                        coverImg: true
                     }
                 }
             }
         })
-    } catch (error) {
-        console.error(error)
+    } catch {
     }
 }

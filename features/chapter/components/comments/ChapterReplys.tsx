@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, Fragment, SetStateAction } from "react";
-import { CommentSkeleton } from "@/components/comments/components/CommentSkeleton";
+import { CommentSkeleton } from "@/components/comments/CommentSkeleton";
 import { getChapterCommentReplys } from "../../queries/get-chapter-comments-replys";
 import { ChapterCommentReplyCreateForm } from "../form/ChapterCommentReplyCreateForm";
 import { ChapterReply } from "./ChapterReply";
