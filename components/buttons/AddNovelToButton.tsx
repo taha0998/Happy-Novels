@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { AddNovelToFavorite } from "@/features/novel/actions/add-novel-to-favorite";
 import { toastStyle } from "@/utils/toastStyle";
 import { useActionFeedback } from "../form/hooks/useActionFeedback";
-import { ActionState, EPMTY_ACTION_STATE } from "../form/utils/to-action-state";
+import { EPMTY_ACTION_STATE } from "../form/utils/to-action-state";
 import { Button } from "../ui/button";
 
 type AddNovelToButtonProps = {
@@ -46,8 +46,8 @@ const AddNovelToButton = ({ to, isAdded }: AddNovelToButtonProps) => {
           className={clsx(
             "flex gap-2 justify-center items-center text-background cursor-pointer relative hover:bottom-0.5 hover:bg-foreground min-w-95 min-h-25.5 rounded-[7px]",
             {
-              "bg-foreground": !added,
-              "bg-[#E70000] hover:bg-[#E70000] min-w-123": added,
+              "bg-foreground": added,
+              "bg-[#E70000] hover:bg-[#E70000] min-w-123": !added,
             },
           )}
           type="submit"
@@ -57,7 +57,7 @@ const AddNovelToButton = ({ to, isAdded }: AddNovelToButtonProps) => {
               <LucideLoaderCircle className="size-12 animate-spin" />
               <span className="text-[35px]">Loading...</span>
             </>
-          ) : !added ? (
+          ) : added ? (
             <>
               <LucidePlus className="size-12" />
               <span className="text-[35px]">Add to {to}</span>

@@ -20,7 +20,7 @@ const ChapterPage = async ({ params }: ChapterPageProps) => {
   if (!chapter) {
     return notFound();
   }
-  await addChapterView(chapterId, chapter.novelId);
+  addChapterView(chapterId, chapter.novelId);
 
   return (
     <div className="w-440.5 self-center flex flex-col">
